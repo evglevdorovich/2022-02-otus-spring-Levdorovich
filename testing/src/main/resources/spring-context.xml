@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="questionViewConverter"
+          class="ru.otus.testing.converter.QuestionsViewConverterImpl">
+    </bean>
+    <bean id="questionParser"
+          class="ru.otus.testing.parser.QuestionCSVParser">
+    </bean>
+    <bean id="questionDao"
+          class="ru.otus.testing.dao.QuestionDaoCSV">
+        <constructor-arg value="questions.csv"/>
+        <constructor-arg ref="questionParser"/>
+    </bean>
+    <bean id="questionService"
+          class="ru.otus.testing.service.QuestionServiceCSV">
+        <constructor-arg ref="questionDao"/>
+    </bean>
+    <bean id="questionViewService"
+          class="ru.otus.testing.service.QuestionViewServiceImpl">
+        <constructor-arg name="questionService" ref="questionService"/>
+        <constructor-arg name="questionsViewConverter" ref="questionViewConverter"/>
+    </bean>
+    <bean id="testService"
+          class="ru.otus.testing.service.TestServiceImpl">
+        <constructor-arg name="questionViewService" ref="questionViewService"/>
+    </bean>
+</beans>
