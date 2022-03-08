@@ -1,10 +1,12 @@
 package ru.otus.testing.converter;
 
+import org.springframework.stereotype.Component;
 import ru.otus.testing.domain.Answer;
 import ru.otus.testing.domain.Question;
 
 import java.util.List;
 
+@Component
 public class QuestionsViewConverterImpl implements QuestionsViewConverter {
 
     @Override
@@ -12,10 +14,27 @@ public class QuestionsViewConverterImpl implements QuestionsViewConverter {
         StringBuilder sb = new StringBuilder();
 
         for (Question question : questions) {
-            appendQuestionDescriptionToStringBuilder(sb, question.getDescription());
-            appendAnswersToStringBuilder(sb, question.getAnswers());
-            sb.append("\n");
+            addQuestionToView(sb, question);
         }
+        return sb.toString();
+    }
+
+    private void addQuestionToView(StringBuilder sb, Question question) {
+        appendQuestionDescriptionToStringBuilder(sb, question.getDescription());
+        appendAnswersToStringBuilder(sb, question.getAnswers());
+        sb.append("\n");
+    }
+
+    @Override
+    public String getOpenedViewQuestion(Question question) {
+        return question.getDescription();
+    }
+
+    @Override
+    public String getClosedViewQuestion(Question question) {
+        StringBuilder sb = new StringBuilder();
+        appendQuestionDescriptionToStringBuilder(sb, question.getDescription());
+        appendAnswersToStringBuilder(sb, question.getAnswers());
         return sb.toString();
     }
 

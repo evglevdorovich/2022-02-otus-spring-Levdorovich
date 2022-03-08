@@ -1,11 +1,13 @@
 package ru.otus.testing.parser;
 
+import org.springframework.stereotype.Component;
 import ru.otus.testing.domain.Answer;
 import ru.otus.testing.domain.Question;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class QuestionCSVParser implements QuestionParser {
     private static final int OPENED_ANSWER_LENGTH = 2;
     private static final int QUESTION_DESCRIPTION_POSITION = 0;

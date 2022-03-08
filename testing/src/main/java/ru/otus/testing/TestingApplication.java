@@ -1,15 +1,21 @@
 package ru.otus.testing;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import ru.otus.testing.service.TestService;
+import ru.otus.testing.service.TestServiceImpl;
 
-
+@Configuration
+@ComponentScan
+@PropertySource("classpath:application.properties")
 public class TestingApplication {
-    private static final String APPLICATION_CONTEXT_RELATIVE_PATH = "/spring-context.xml";
 
     public static void main(String[] args) {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(APPLICATION_CONTEXT_RELATIVE_PATH);
-        TestService testService = (TestService) context.getBean("testService");
+        ApplicationContext context = new AnnotationConfigApplicationContext(TestingApplication.class);
+        TestService testService = context.getBean(TestServiceImpl.class);
         testService.startTest();
     }
 

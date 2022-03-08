@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface QuestionsViewConverter {
     String getViewQuestions(List<Question> questions);
+
+    String getOpenedViewQuestion(Question question);
+
+    String getClosedViewQuestion(Question question);
 }
