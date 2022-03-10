@@ -81,10 +81,11 @@ public class TestServiceImpl implements TestService {
 
     private String getValidInputStringAnswerToClosedQuestion() {
         String inputString = IOService.inputText();
-        boolean validateInputString = answerService.validateInputAnswersToClosedQuestions(inputString);
-        while (!validateInputString) {
+        boolean validatedInputString = answerService.validateInputAnswersToClosedQuestions(inputString);
+        while (!validatedInputString) {
+
             inputString = IOService.inputAnswersWithPrompt(INCORRECT_CLOSED_ANSWER_PATTERN);
-            validateInputString = answerService.validateInputAnswersToClosedQuestions(inputString);
+            validatedInputString = answerService.validateInputAnswersToClosedQuestions(inputString);
         }
         return inputString;
     }
