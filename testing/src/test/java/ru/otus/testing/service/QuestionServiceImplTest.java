@@ -17,11 +17,11 @@ import static org.mockito.BDDMockito.given;
 
 @DisplayName("Class QuestionServiceCSV")
 @ExtendWith(MockitoExtension.class)
-class QuestionServiceCSVTest {
+class QuestionServiceImplTest {
     @Mock
     private QuestionDao questionDao;
     @InjectMocks
-    private QuestionServiceCSV questionService;
+    private QuestionServiceImpl questionService;
 
     @DisplayName("call getAll() from QuestionDao")
     @Test

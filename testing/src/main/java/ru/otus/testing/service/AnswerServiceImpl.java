@@ -5,9 +5,18 @@ import ru.otus.testing.domain.Answer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
-public class AnswerServiceCSV implements AnswerService {
+public class AnswerServiceImpl implements AnswerService {
+
+    private static final String CLOSED_ANSWER_PATTERN = "(\\d+,?)*";
+    private final Pattern pattern;
+
+    public AnswerServiceImpl() {
+        pattern = Pattern.compile(CLOSED_ANSWER_PATTERN);
+    }
 
     @Override
     public List<Integer> getRightAnswersNumber(List<Answer> answers) {
@@ -22,5 +31,11 @@ public class AnswerServiceCSV implements AnswerService {
     @Override
     public String getRightAnswer(Answer answer) {
         return answer.getDescription();
+    }
+
+    @Override
+    public boolean validateInputAnswersToClosedQuestions(String answer) {
+        Matcher matcher = pattern.matcher(answer);
+        return matcher.matches();
     }
 }

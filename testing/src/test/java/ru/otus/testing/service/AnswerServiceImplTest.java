@@ -5,27 +5,52 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.otus.testing.domain.Answer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Class TestIOServiceImpl")
+@DisplayName("Class AnswerServiceCSV")
 @ExtendWith(MockitoExtension.class)
-class TestIOServiceImplTest {
+class AnswerServiceImplTest {
 
+    private AnswerServiceImpl answerServiceImpl;
     private static final String CLOSED_ANSWER_PATTERN = "(\\d+,?)*";
     private Pattern pattern;
 
     @BeforeEach
     void setUp() {
+        answerServiceImpl = new AnswerServiceImpl();
         pattern = Pattern.compile(CLOSED_ANSWER_PATTERN);
+    }
+
+    @DisplayName("getRightAnswersNumber should return right answers numbers")
+    @Test
+    void shouldReturnRightAnswersNumber() {
+        List<Answer> answers = new ArrayList<>();
+        answers.add(new Answer("desc1", true));
+        answers.add(new Answer("desc2", false));
+        answers.add(new Answer("desc3", true));
+        answers.add(new Answer("desc4", false));
+        assertEquals(List.of(1, 3), answerServiceImpl.getRightAnswersNumber(answers));
+    }
+
+    @DisplayName("getRightAnswer should return Answer Description")
+    @Test
+    void shouldReturnAnswerDescription() {
+        String desc = "description";
+        Answer answer = new Answer(desc, true);
+        assertEquals(answerServiceImpl.getRightAnswer(answer), desc);
     }
 
     @DisplayName("Should match pattern for closed answers")
     @Test
-    void shouldMatchPattern() {
+    void shouldMatchattern() {
         String rightPattern1 = "1,2,3";
         String rightPattern2 = "2,3";
         String rightPattern3 = "1";
@@ -55,4 +80,6 @@ class TestIOServiceImplTest {
         matcher = pattern.matcher(rightPattern3);
         then(matcher.matches()).isEqualTo(false);
     }
+
+
 }

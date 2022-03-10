@@ -8,4 +8,6 @@ public interface AnswerService {
     List<Integer> getRightAnswersNumber(List<Answer> answers);
 
     String getRightAnswer(Answer answer);
+
+    boolean validateInputAnswersToClosedQuestions(String answer);
 }

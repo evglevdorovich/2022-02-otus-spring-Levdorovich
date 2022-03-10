@@ -3,43 +3,47 @@ package ru.otus.testing.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.otus.testing.domain.Question;
-import ru.otus.testing.helper.ListEquals;
+import ru.otus.testing.dto.ClosedQuestionViewToRightAnswersDTO;
+import ru.otus.testing.dto.OpenedQuestionViewToRightAnswerDTO;
+import ru.otus.testing.helper.ListComparer;
 import ru.otus.testing.parser.StringToIntegerNumberParser;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class TestServiceImpl implements TestService {
     private final QuestionViewService questionViewService;
-    private final TestIOService testIOService;
+    private final IOService IOService;
     private final QuestionService questionService;
-    private final ListEquals listEquals;
+    private final ListComparer listComparer;
     private final StringToIntegerNumberParser numberParser;
     private final int minimumScore;
+    private final AnswerService answerService;
 
+    private static final String INCORRECT_CLOSED_ANSWER_PATTERN = "Incorrect answer pattern, please try more";
     private static final String ENTER_FIRST_NAME = "please enter your first name:";
     private static final String ENTER_SECOND_NAME = "please enter your lastName name:";
     private static final String INSERT_PATTERN = "Insert right answers separated by commas: ";
     private static final String PASSED_TEST_PATTERN = "You've passed the test\nYour score is ";
     private static final String NOT_PASSED_TEST_PATTERN = "You haven't passed the test\nYour score is ";
 
-    public TestServiceImpl(QuestionViewService questionViewService, TestIOService testIOService
-            , QuestionService questionService, ListEquals listEquals
-            , StringToIntegerNumberParser numberParser, @Value("${questions.minScore}") int minimumScore) {
+    public TestServiceImpl(QuestionViewService questionViewService, IOService IOService, AnswerService answerService
+            , QuestionService questionService, ListComparer listComparer, StringToIntegerNumberParser numberParser
+            , @Value("${questions.minScore}") int minimumScore) {
         this.questionViewService = questionViewService;
-        this.testIOService = testIOService;
+        this.IOService = IOService;
         this.questionService = questionService;
-        this.listEquals = listEquals;
+        this.listComparer = listComparer;
         this.numberParser = numberParser;
         this.minimumScore = minimumScore;
+        this.answerService = answerService;
     }
 
     public void startTest() {
-        testIOService.outputText(ENTER_FIRST_NAME);
-        String firstName = testIOService.inputText();
-        testIOService.outputText(ENTER_SECOND_NAME);
-        String lastName = testIOService.inputText();
+        IOService.outputText(ENTER_FIRST_NAME);
+        String firstName = IOService.inputText();
+        IOService.outputText(ENTER_SECOND_NAME);
+        String lastName = IOService.inputText();
         List<Question> questions = questionService.getAll();
         int numberOfCorrectAnswers = answerQuestions(questions);
         printResult(numberOfCorrectAnswers, firstName, lastName);
@@ -67,28 +71,31 @@ public class TestServiceImpl implements TestService {
     }
 
     private boolean answerClosedQuestion(Question question) {
-        Map<String, List<Integer>> closedQuestionViewWithAnswers = questionViewService
-                .getClosedQuestionViewWithAnswers(question);
-        int answersSize = question.getAnswers().size();
-        for (Map.Entry<String, List<Integer>> q : closedQuestionViewWithAnswers.entrySet()) {
-            testIOService.outputText(q.getKey() + "\n" + INSERT_PATTERN);
-            List<Integer> numbers = numberParser.StringToListInteger(testIOService.inputAnswersToClosedQuestion());
-            return listEquals.listEqualsIgnoreOrder(numbers, q.getValue());
+        ClosedQuestionViewToRightAnswersDTO closedQuestionViewWithAnswers = questionViewService
+                .getClosedQuestionViewWithAnswersDTO(question);
+        IOService.outputText(closedQuestionViewWithAnswers.getClosedQuestionView() + "\n" + INSERT_PATTERN);
+        String inputString = getValidInputStringAnswerToClosedQuestion();
+        List<Integer> numbers = numberParser.stringToListInteger(inputString);
+        return listComparer.listEqualsIgnoreOrder(numbers, closedQuestionViewWithAnswers.getNumberOfRightAnswers());
+    }
+
+    private String getValidInputStringAnswerToClosedQuestion() {
+        String inputString = IOService.inputText();
+        boolean validateInputString = answerService.validateInputAnswersToClosedQuestions(inputString);
+        while (!validateInputString) {
+            inputString = IOService.inputAnswersWithPrompt(INCORRECT_CLOSED_ANSWER_PATTERN);
+            validateInputString = answerService.validateInputAnswersToClosedQuestions(inputString);
         }
-        return false;
+        return inputString;
     }
 
     private boolean answerOpenedQuestion(Question question) {
-        Map<String, String> openedQuestionViewWithAnswer = questionViewService
-                .getOpenedQuestionViewWithAnswer(question);
-        for (Map.Entry<String, String> q : openedQuestionViewWithAnswer.entrySet()) {
-            testIOService.outputText(q.getKey());
-            String chosenAnswer = testIOService.inputText().trim();
-            return chosenAnswer.equalsIgnoreCase(q.getValue());
-        }
-        return false;
+        OpenedQuestionViewToRightAnswerDTO openedQuestionViewWithAnswer = questionViewService
+                .getOpenedQuestionViewWithAnswerDTO(question);
+        IOService.outputText(openedQuestionViewWithAnswer.getQuestionView());
+        String chosenAnswer = IOService.inputText().trim();
+        return chosenAnswer.equalsIgnoreCase(openedQuestionViewWithAnswer.getAnswer());
     }
-
 
     private boolean isOpened(Question question) {
         return question.getAnswers().size() == 1;
@@ -99,11 +106,11 @@ public class TestServiceImpl implements TestService {
     }
 
     private void printResult(int numberOfCorrectAnswers, String firstName, String lastName) {
-        testIOService.outputText("Dear " + firstName + " " + lastName);
+        IOService.outputText("Dear " + firstName + " " + lastName);
         if (minimumScore <= numberOfCorrectAnswers) {
-            testIOService.outputText(PASSED_TEST_PATTERN + numberOfCorrectAnswers);
+            IOService.outputText(PASSED_TEST_PATTERN + numberOfCorrectAnswers);
         } else {
-            testIOService.outputText(NOT_PASSED_TEST_PATTERN + numberOfCorrectAnswers);
+            IOService.outputText(NOT_PASSED_TEST_PATTERN + numberOfCorrectAnswers);
         }
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class QuestionServiceCSV implements QuestionService {
+public class QuestionServiceImpl implements QuestionService {
     private final QuestionDao questionDao;
 
     @Override

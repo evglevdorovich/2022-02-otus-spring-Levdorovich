@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
-import ru.otus.testing.helper.ListEquals;
+import ru.otus.testing.helper.ListComparer;
 import ru.otus.testing.parser.StringToIntegerNumberParser;
 
 import static org.mockito.Mockito.times;
@@ -22,13 +22,15 @@ class TestServiceImplTest {
     private QuestionViewService questionViewService;
     private TestServiceImpl testService;
     @Mock
-    private TestIOService testIOService;
+    private IOService IOService;
     @Mock
     private QuestionService questionService;
     @Mock
-    private ListEquals listEquals;
+    private ListComparer listComparer;
     @Mock
     private StringToIntegerNumberParser numberParser;
+    @Mock
+    private AnswerService answerService;
     @Value("${questions.minScore}")
     private int minimumScore;
     private static final String ENTER_FIRST_NAME = "please enter your first name:";
@@ -37,17 +39,17 @@ class TestServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        testService = new TestServiceImpl(questionViewService, testIOService, questionService, listEquals,
-                numberParser, minimumScore);
+        testService = new TestServiceImpl(questionViewService, IOService, answerService, questionService,
+                listComparer, numberParser, minimumScore);
     }
 
     @DisplayName("shouldCallInputOutputQuestionServiceGetAll")
     @Test
     void shouldCallInputOutputTextQuestionServiceGetAllAndAnswerQuestions() {
         testService.startTest();
-        verify(testIOService, times(1)).outputText(ENTER_FIRST_NAME);
-        verify(testIOService, times(2)).inputText();
-        verify(testIOService, times(1)).outputText(ENTER_SECOND_NAME);
+        verify(IOService, times(1)).outputText(ENTER_FIRST_NAME);
+        verify(IOService, times(2)).inputText();
+        verify(IOService, times(1)).outputText(ENTER_SECOND_NAME);
         verify(questionService, times(1)).getAll();
     }
 
