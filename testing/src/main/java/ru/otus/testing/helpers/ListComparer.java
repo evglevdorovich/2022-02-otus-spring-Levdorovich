@@ -1,4 +1,4 @@
-package ru.otus.testing.helper;
+package ru.otus.testing.helpers;
 
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package ru.otus.testing.service;
+package ru.otus.testing.services;
 
 import ru.otus.testing.domain.Answer;
 
@@ -8,6 +8,4 @@ public interface AnswerService {
     List<Integer> getRightAnswersNumber(List<Answer> answers);
 
     String getRightAnswer(Answer answer);
-
-    boolean validateInputAnswersToClosedQuestions(String answer);
 }

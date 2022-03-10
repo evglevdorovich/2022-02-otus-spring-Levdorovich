@@ -1,4 +1,4 @@
-package ru.otus.testing.service;
+package ru.otus.testing.services;
 
 import org.springframework.stereotype.Service;
 

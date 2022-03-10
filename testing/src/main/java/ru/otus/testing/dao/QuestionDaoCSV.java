@@ -8,7 +8,7 @@ import ru.otus.testing.domain.Question;
 import ru.otus.testing.exceptions.CsvValidateException;
 import ru.otus.testing.exceptions.EmptyResourceException;
 import ru.otus.testing.exceptions.ResourceNotFoundException;
-import ru.otus.testing.parser.QuestionParser;
+import ru.otus.testing.parsers.QuestionParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;

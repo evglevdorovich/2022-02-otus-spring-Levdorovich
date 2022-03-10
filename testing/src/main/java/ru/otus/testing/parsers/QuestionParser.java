@@ -1,4 +1,4 @@
-package ru.otus.testing.parser;
+package ru.otus.testing.parsers;
 
 import ru.otus.testing.domain.Question;
 

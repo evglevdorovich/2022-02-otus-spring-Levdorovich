@@ -1,4 +1,4 @@
-package ru.otus.testing.service;
+package ru.otus.testing.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -8,8 +8,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
-import ru.otus.testing.helper.ListComparer;
-import ru.otus.testing.parser.StringToIntegerNumberParser;
+import ru.otus.testing.facades.TestFacade;
+import ru.otus.testing.helpers.InputAnswerValidatorImpl;
+import ru.otus.testing.helpers.ListComparer;
+import ru.otus.testing.parsers.StringToIntegerNumberParser;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,19 +20,13 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 @ComponentScan("src/main/java")
 class TestServiceImplTest {
-    @Mock
-    private QuestionViewService questionViewService;
     private TestServiceImpl testService;
-    @Mock
-    private IOService IOService;
-    @Mock
-    private QuestionService questionService;
     @Mock
     private ListComparer listComparer;
     @Mock
     private StringToIntegerNumberParser numberParser;
     @Mock
-    private AnswerService answerService;
+    private TestFacade testFacade;
     @Value("${questions.minScore}")
     private int minimumScore;
     private static final String ENTER_FIRST_NAME = "please enter your first name:";
@@ -39,18 +35,17 @@ class TestServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        testService = new TestServiceImpl(questionViewService, IOService, answerService, questionService,
-                listComparer, numberParser, minimumScore);
+        testService = new TestServiceImpl(listComparer,numberParser,minimumScore,testFacade);
     }
 
     @DisplayName("shouldCallInputOutputQuestionServiceGetAll")
     @Test
     void shouldCallInputOutputTextQuestionServiceGetAllAndAnswerQuestions() {
         testService.startTest();
-        verify(IOService, times(1)).outputText(ENTER_FIRST_NAME);
-        verify(IOService, times(2)).inputText();
-        verify(IOService, times(1)).outputText(ENTER_SECOND_NAME);
-        verify(questionService, times(1)).getAll();
+        verify(testFacade, times(1)).outputText(ENTER_FIRST_NAME);
+        verify(testFacade, times(2)).inputText();
+        verify(testFacade, times(1)).outputText(ENTER_SECOND_NAME);
+        verify(testFacade, times(1)).getAll();
     }
 
 }
