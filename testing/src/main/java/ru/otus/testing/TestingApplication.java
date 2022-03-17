@@ -16,7 +16,7 @@ public class TestingApplication {
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(TestingApplication.class);
         TestService testService = context.getBean(TestServiceImpl.class);
-        testService.startTest();
+        testService.executeTest();
     }
 
 }
