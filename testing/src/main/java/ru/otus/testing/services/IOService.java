@@ -8,5 +8,7 @@ public interface IOService {
 
     void outputText(String text);
 
+    void outputTextInFormat(String format, Object... args);
+
     List<Integer> inputCommaSeparatedIntegersWithPrompt(String prompt);
 }

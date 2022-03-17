@@ -9,6 +9,8 @@ import ru.otus.testing.domain.TestResult;
 public class TestResultPrinterServiceImpl implements TestResultPrinterService {
     private final IOService ioService;
     private static final String FORMAT_RESULT = "Dear %s %s your result is %d/%d%n";
+    private static final String SUCCESS_RESULT = "You've passed the test.";
+    private static final String FAIL_RESULT = "You haven't passed the test.";
 
     @Override
     public void printResult(TestResult testResult) {
@@ -17,9 +19,9 @@ public class TestResultPrinterServiceImpl implements TestResultPrinterService {
         int quantityOfAnsweredQuestions = testResult.getQuantityOfAnsweredQuestions();
         int quantityOfRightAnsweredQuestions = testResult.getQuantityOfRightAnsweredQuestions();
         int minResult = testResult.getMinScore();
-        System.out.printf(FORMAT_RESULT, userName, lastName, quantityOfRightAnsweredQuestions,
+        ioService.outputTextInFormat(FORMAT_RESULT, userName, lastName, quantityOfRightAnsweredQuestions,
                 quantityOfAnsweredQuestions);
-        ioService.outputText(quantityOfRightAnsweredQuestions >= minResult ? "You've passed the test." :
-                "You haven't passed the test.");
+        ioService.outputText(quantityOfRightAnsweredQuestions >= minResult ? SUCCESS_RESULT :
+                FAIL_RESULT);
     }
 }

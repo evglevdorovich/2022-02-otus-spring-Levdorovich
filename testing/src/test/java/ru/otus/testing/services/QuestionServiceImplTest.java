@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @DisplayName("Class QuestionServiceCSV")
 @ExtendWith(MockitoExtension.class)
@@ -30,5 +31,6 @@ class QuestionServiceImplTest {
         given(questionDao.getAll())
                 .willReturn(questions);
         assertThat(questionService.getAll()).isEqualTo(questions);
+        verifyNoMoreInteractions(questionDao);
     }
 }

@@ -32,6 +32,11 @@ public class IOServiceStream implements IOService {
     }
 
     @Override
+    public void outputTextInFormat(String format, Object... args) {
+        output.printf(format, args);
+    }
+
+    @Override
     public List<Integer> inputCommaSeparatedIntegersWithPrompt(String prompt) {
         outputText(prompt);
         String strIntegers = inputText();
