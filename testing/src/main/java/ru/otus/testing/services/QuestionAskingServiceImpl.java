@@ -2,6 +2,7 @@ package ru.otus.testing.services;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.otus.testing.config.LocaleSettings;
 import ru.otus.testing.converter.QuestionViewConverter;
 import ru.otus.testing.domain.Question;
 import ru.otus.testing.domain.TestResult;
@@ -9,6 +10,7 @@ import ru.otus.testing.domain.User;
 import ru.otus.testing.exceptions.InvalidStringOfCommaSeparatedIntegers;
 
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class QuestionAskingServiceImpl implements QuestionAskingService {
@@ -16,15 +18,21 @@ public class QuestionAskingServiceImpl implements QuestionAskingService {
     private final IOService ioService;
     private final QuestionViewConverter questionViewConverter;
     private final AnswersChecker answerChecker;
+    private final MessageService messageService;
+    private final LocaleSettings localeSettings;
 
-    private static final String INSERT_PATTERN = "Insert numbers of right answers separated by commas: ";
+    private static final String INSERT_CODE = "insert.pattern";
+    private static final String INSERT_LIST_OF_INTEGER_EXCEPTION_WARN = "insert.listOfNumbers.exceptionPattern";
 
     public QuestionAskingServiceImpl(@Value("${questions.minScore}") int minimumScore, IOService ioService,
-                                     QuestionViewConverter questionViewConverter, AnswersChecker answerChecker) {
+                                     QuestionViewConverter questionViewConverter, AnswersChecker answerChecker,
+                                     MessageService messageService, LocaleSettings localeSettings) {
         this.minimumScore = minimumScore;
         this.ioService = ioService;
         this.questionViewConverter = questionViewConverter;
         this.answerChecker = answerChecker;
+        this.messageService = messageService;
+        this.localeSettings = localeSettings;
     }
 
     @Override
@@ -48,7 +56,9 @@ public class QuestionAskingServiceImpl implements QuestionAskingService {
         printQuestionWithPrompt(question);
         List<Integer> answersList;
         try {
-            answersList = ioService.inputCommaSeparatedIntegersWithPrompt(INSERT_PATTERN);
+            String insertString = getMessageFromCurrentLocale(INSERT_CODE);
+            String warning = getMessageFromCurrentLocale(INSERT_LIST_OF_INTEGER_EXCEPTION_WARN);
+            answersList = ioService.inputCommaSeparatedIntegersWithPromptAndWarning(insertString, warning);
         } catch (InvalidStringOfCommaSeparatedIntegers ex) {
             ioService.outputText(ex.getMessage() + "\n");
             return getIntegerListWithAnswers(question);
@@ -60,4 +70,11 @@ public class QuestionAskingServiceImpl implements QuestionAskingService {
         String questionView = questionViewConverter.getViewQuestion(question);
         ioService.outputText(questionView);
     }
+
+    private String getMessageFromCurrentLocale(String code) {
+        Locale currentLocale = localeSettings.getLocale();
+        return messageService.getMessage(code, currentLocale);
+    }
+
+
 }

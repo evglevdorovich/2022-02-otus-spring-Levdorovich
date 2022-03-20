@@ -10,5 +10,5 @@ public interface IOService {
 
     void outputTextInFormat(String format, Object... args);
 
-    List<Integer> inputCommaSeparatedIntegersWithPrompt(String prompt);
+    List<Integer> inputCommaSeparatedIntegersWithPromptAndWarning(String prompt, String warning);
 }
