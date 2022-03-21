@@ -13,7 +13,5 @@ public class TestingApplication {
         ConfigurableApplicationContext ctx = SpringApplication.run(TestingApplication.class, args);
         TestService testService = ctx.getBean(TestServiceImpl.class);
         testService.executeTest();
-
     }
-
 }

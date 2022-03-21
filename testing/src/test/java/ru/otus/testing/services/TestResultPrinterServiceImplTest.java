@@ -7,15 +7,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.otus.testing.config.LocaleSettings;
 import ru.otus.testing.domain.Question;
 import ru.otus.testing.domain.TestResult;
 import ru.otus.testing.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Class TestResultPrinterServiceImplTest")
 @ExtendWith(MockitoExtension.class)
@@ -24,10 +25,15 @@ class TestResultPrinterServiceImplTest {
     private TestResultPrinterServiceImpl testResultPrinterService;
     @Mock
     private IOService ioService;
+    @Mock
+    private MessageService messageService;
+    @Mock
+    private LocaleSettings localeSettings;
+
     private TestResult testResult;
-    private static final String FORMAT_RESULT = "Dear %s %s your result is %d/%d%n";
-    private static final String SUCCESS_RESULT = "You've passed the test.";
-    private static final String FAIL_RESULT = "You haven't passed the test.";
+    private static final String FORMAT_RESULT_CODE = "test.result";
+    private static final String SUCCESS_RESULT_CODE = "test.result.success";
+    private static final String FAIL_RESULT_CODE = "test.result.fail";
 
     @BeforeEach
     void setUp() {
@@ -40,23 +46,24 @@ class TestResultPrinterServiceImplTest {
     }
 
     @Test
-    @DisplayName("should print success result")
+    @DisplayName("should print test result")
     void shouldPrintSuccessResult() {
-        testResultPrinterService.printResult(testResult);
+        Locale locale = Locale.ROOT;
+        when(localeSettings.getLocale())
+                .thenReturn(locale);
         String userName = testResult.getUser().getFirstName();
         String lastName = testResult.getUser().getLastName();
         int quantityOfRightAnsweredQuestions = testResult.getQuantityOfRightAnsweredQuestions();
         int quantityOfAnsweredQuestion = testResult.getQuantityOfAnsweredQuestions();
-        verify(ioService, times(1)).outputTextInFormat(FORMAT_RESULT, userName, lastName, quantityOfRightAnsweredQuestions,
-                quantityOfAnsweredQuestion);
-        verify(ioService, times(1)).outputText(SUCCESS_RESULT);
-    }
-
-    @Test
-    @DisplayName("should print fail result")
-    void shouldPrintFailResult() {
-        testResult.setMinScore(4);
+        String result = "result";
+        lenient().when(messageService.getMessage(FORMAT_RESULT_CODE, new Object[]{userName, lastName, quantityOfRightAnsweredQuestions,
+                quantityOfAnsweredQuestion},locale))
+                .thenReturn(result);
+        String success = "success";
+        lenient().when(messageService.getMessage(SUCCESS_RESULT_CODE,new Object[]{},locale))
+                .thenReturn(success);
         testResultPrinterService.printResult(testResult);
-        verify(ioService, times(1)).outputText(FAIL_RESULT);
+        verify(ioService, times(1)).outputText(result);
+        verify(ioService, times(1)).outputText(success);
     }
 }

@@ -27,6 +27,8 @@ class TestServiceImplTest {
     private QuestionAskingService questionAskingService;
     @Mock
     private TestResultPrinterService testResultPrinterService;
+    @Mock
+    private ChooserLanguage chooserLanguage;
     @InjectMocks
     private TestServiceImpl testService;
 
@@ -47,6 +49,7 @@ class TestServiceImplTest {
         given(questionAskingService.askQuestions(questions, user))
                 .willReturn(testResult);
         testService.executeTest();
+        verify(chooserLanguage).chooseLanguage();
         verify(testResultPrinterService, times(1)).printResult(testResult);
         verifyNoMoreInteractions(questionService, userInfoService, questionAskingService
                 , testResultPrinterService);
