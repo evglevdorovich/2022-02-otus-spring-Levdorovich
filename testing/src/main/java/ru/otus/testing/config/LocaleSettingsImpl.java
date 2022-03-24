@@ -1,30 +1,35 @@
 package ru.otus.testing.config;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Component
+@Getter
+@Setter
+@ConfigurationProperties(prefix = "application.locale")
 public class LocaleSettingsImpl implements LocaleSettings {
-    @Getter
     private Locale locale;
-    private final String forRuTag;
+    private Map<String, String> languageToLocaleTag;
 
-    public LocaleSettingsImpl(@Value("${application.locales.ruLangTag}") String ruLangTag,
-                              @Value("${application.locales.defaultLocale}") String defaultLocale) {
-        this.forRuTag = ruLangTag;
-        locale = Locale.forLanguageTag(defaultLocale);
+    public LocaleSettingsImpl(@Value("${application.locale.defaultTagLocale}") String defaultTagLocale) {
+        locale = Locale.forLanguageTag(defaultTagLocale);
     }
 
     @Override
-    public void changeToRootLocale() {
-        locale = Locale.ROOT;
+    public Map<Integer, String> getOrderToLanguage() {
+        Map<Integer, String> orderToLanguage = new TreeMap<>();
+        int initIndex = 1;
+        for (String language : languageToLocaleTag.keySet()) {
+            orderToLanguage.put(initIndex++, language);
+        }
+        return orderToLanguage;
     }
 
-    @Override
-    public void changeToRuLocale() {
-        locale = Locale.forLanguageTag(forRuTag);
-    }
 }

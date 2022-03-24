@@ -4,7 +4,6 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.otus.testing.config.LocaleSettings;
 import ru.otus.testing.config.QuestionResourceConfig;
 import ru.otus.testing.domain.Question;
 import ru.otus.testing.exceptions.CsvValidateException;
@@ -28,7 +27,7 @@ public class QuestionDaoCSV implements QuestionDao {
 
     @Override
     public List<Question> getAll() {
-        String resourcePath = questionResourceConfig.getResourcePathForCurrentLocale();
+        String resourcePath = questionResourceConfig.getResourcePath();
         try (CSVReader reader = new CSVReader(
                 new BufferedReader
                         (new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader()
@@ -39,7 +38,7 @@ public class QuestionDaoCSV implements QuestionDao {
             }
             return questionParser.parse(csvResource);
         } catch (NullPointerException npe) {
-            throw new ResourceNotFoundException("questions.resourcePath", npe);
+            throw new ResourceNotFoundException(resourcePath, npe);
         } catch (CsvException e) {
             throw new CsvValidateException("csv validate fails", e);
         } catch (IOException e) {

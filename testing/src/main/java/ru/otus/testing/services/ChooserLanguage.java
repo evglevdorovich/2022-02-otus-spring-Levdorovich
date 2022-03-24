@@ -1,5 +1,7 @@
 package ru.otus.testing.services;
 
+import java.util.Locale;
+
 public interface ChooserLanguage {
-    void chooseLanguage();
+    Locale chooseLanguage();
 }

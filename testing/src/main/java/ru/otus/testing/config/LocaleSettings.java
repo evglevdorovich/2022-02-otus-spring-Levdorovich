@@ -1,11 +1,14 @@
 package ru.otus.testing.config;
 
 import java.util.Locale;
+import java.util.Map;
 
 public interface LocaleSettings {
     Locale getLocale();
 
-    void changeToRootLocale();
+    void setLocale(Locale locale);
 
-    void changeToRuLocale();
+    Map<String,String> getLanguageToLocaleTag();
+
+    Map<Integer,String> getOrderToLanguage();
 }
