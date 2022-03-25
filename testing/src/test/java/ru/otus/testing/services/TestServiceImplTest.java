@@ -6,12 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.otus.testing.config.LocaleSettings;
 import ru.otus.testing.domain.Question;
 import ru.otus.testing.domain.TestResult;
 import ru.otus.testing.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -29,6 +31,8 @@ class TestServiceImplTest {
     private TestResultPrinterService testResultPrinterService;
     @Mock
     private ChooserLanguage chooserLanguage;
+    @Mock
+    private LocaleSettings localeSettings;
     @InjectMocks
     private TestServiceImpl testService;
 
@@ -42,6 +46,9 @@ class TestServiceImplTest {
         int minScore = 3;
         TestResult testResult = new TestResult(user, quantityOfRightAnsweredQuestions, quantityOfAnsweredQuestions,
                 questions, minScore);
+        Locale selectedLocale = Locale.ROOT;
+        given(chooserLanguage.chooseLanguage())
+                .willReturn(selectedLocale);
         given(userInfoService.askUserInfo())
                 .willReturn(user);
         given(questionService.getAll())
@@ -50,8 +57,11 @@ class TestServiceImplTest {
                 .willReturn(testResult);
         testService.executeTest();
         verify(chooserLanguage).chooseLanguage();
+        verify(localeSettings).setLocale(selectedLocale);
+        verify(userInfoService).askUserInfo();
+        verify(questionService).getAll();
         verify(testResultPrinterService, times(1)).printResult(testResult);
         verifyNoMoreInteractions(questionService, userInfoService, questionAskingService
-                , testResultPrinterService);
+                , testResultPrinterService, localeSettings);
     }
 }

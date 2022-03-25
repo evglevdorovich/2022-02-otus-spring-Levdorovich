@@ -1,5 +1,6 @@
 package ru.otus.testing.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,73 +9,63 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.testing.config.LocaleSettings;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @DisplayName("class ChooserLanguageImplTest:")
 @ExtendWith(MockitoExtension.class)
 class ChooserLanguageImplTest {
-//
-//    private static final String LANG_CHOOSER_CODE = "lang.choose";
-//    private static final String LANG_INCORRECT_NUMBER = "lang.warn.incorrectNumber";
-//    private static final String NUMBER_OF_ROOT_LOCALE = "1";
-//    private static final String NUMBER_OF_RUSSIAN_LOCALE = "2";
-//    @Mock
-//    private LocaleSettings localeSettings;
-//    @Mock
-//    private IOService ioService;
-//    @Mock
-//    private MessageService messageService;
-//    @InjectMocks
-//    private ChooserLanguageImpl chooserLanguage;
-//
-//    @Test
-//    @DisplayName("test chooseLanguage should change Locale to ROOT with first String: incorrectNumber")
-//    void shouldChangeToEnLocaleWithFirstIncorrectNumber() {
-//        Locale localeEx1 = Locale.forLanguageTag("ru");
-//        String msg = "msg";
-//        String outputError = "output error";
-//        String inCorrectNumberOfLanguage = "3";
-//        when(localeSettings.getLocale())
-//                .thenReturn(localeEx1);
-//        when(messageService.getMessage(LANG_CHOOSER_CODE, localeEx1))
-//                .thenReturn(msg);
-//        when(messageService.getMessage(LANG_INCORRECT_NUMBER, localeEx1))
-//                .thenReturn(outputError);
-//        when(ioService.inputText())
-//                .thenReturn(inCorrectNumberOfLanguage)
-//                .thenReturn(NUMBER_OF_ROOT_LOCALE);
-//        chooserLanguage.chooseLanguage();
-//        verify(localeSettings, times(3)).getLocale();
-//        verify(ioService, times(2)).outputText(msg);
-//        verify(ioService).outputText(outputError);
-//        verify(localeSettings).changeToRootLocale();
-//
-//    }
-//
-//    @Test
-//    @DisplayName("test chooseLanguage should change Locale to RU with first String: incorrectNumber ")
-//    void shouldChangeToRuLocaleWithFirstIncorrectNumber(){
-//        Locale localeEx1 = Locale.ROOT;
-//        String msg = "msg";
-//        String outputError = "output error";
-//        String inCorrectNumberOfLanguage = "3";
-//        when(localeSettings.getLocale())
-//                .thenReturn(localeEx1);
-//        when(messageService.getMessage(LANG_CHOOSER_CODE, localeEx1))
-//                .thenReturn(msg);
-//        when(messageService.getMessage(LANG_INCORRECT_NUMBER, localeEx1))
-//                .thenReturn(outputError);
-//        when(ioService.inputText())
-//                .thenReturn(inCorrectNumberOfLanguage)
-//                .thenReturn(NUMBER_OF_RUSSIAN_LOCALE);
-//        chooserLanguage.chooseLanguage();
-//        verify(localeSettings, times(3)).getLocale();
-//        verify(ioService,times(2)).outputText(msg);
-//        verify(ioService).outputText(outputError);
-//        verify(localeSettings).changeToRuLocale();
-//    }
 
+    private static final String LANG_CHOOSER_CODE = "lang.choose";
+    private static final String LANG_INCORRECT_NUMBER = "lang.warn.incorrectNumber";
+    @Mock
+    private LocaleSettings localeSettings;
+    @Mock
+    private MessageIOService messageIOService;
+    @InjectMocks
+    private ChooserLanguageImpl chooserLanguage;
 
+    private Map<String, String> languageForLocaleTag;
+    private Map<Integer, String> orderToLanguage;
+    private String textPattern;
+    private String invalidInputStringForExpectedNumber;
+    private String validInputStringForExpectedNumber;
+    private String ruTag;
+
+    @BeforeEach
+    void setUp() {
+        ruTag = "ru";
+        languageForLocaleTag = new HashMap<>();
+        languageForLocaleTag.put("English", "");
+        languageForLocaleTag.put("Russian", "ru");
+        orderToLanguage = new HashMap<>();
+        orderToLanguage.put(1, "English");
+        orderToLanguage.put(2, "Russian");
+        textPattern = "1 - English, 2 - Russian ";
+        invalidInputStringForExpectedNumber = "2f";
+        validInputStringForExpectedNumber = "2";
+    }
+
+    @Test
+    @DisplayName("test chooseLanguage should change Locale with first incorrectInput")
+    void shouldChangeLocaleWithFirstIncorrectNumber() {
+        when(localeSettings.getLanguageToLocaleTag())
+                .thenReturn(languageForLocaleTag);
+        when(localeSettings.getOrderToLanguage())
+                .thenReturn(orderToLanguage);
+        when(messageIOService.inputText())
+                .thenReturn(invalidInputStringForExpectedNumber).thenReturn(validInputStringForExpectedNumber);
+
+        chooserLanguage.chooseLanguage();
+
+        verify(messageIOService, times(2)).outputMessageByCode(LANG_CHOOSER_CODE);
+        verify(messageIOService, times(2)).outputText(textPattern);
+        verify(messageIOService, times(2)).inputText();
+        verify(messageIOService, times(1)).outputMessageByCode(LANG_INCORRECT_NUMBER);
+        assertThat(chooserLanguage.chooseLanguage()).isEqualTo(Locale.forLanguageTag(ruTag));
+    }
 }

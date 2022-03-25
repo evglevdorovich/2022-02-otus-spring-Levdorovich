@@ -7,14 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.testing.config.LocaleSettings;
 import ru.otus.testing.domain.Question;
 import ru.otus.testing.domain.TestResult;
 import ru.otus.testing.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static org.mockito.Mockito.*;
 
@@ -24,11 +22,7 @@ class TestResultPrinterServiceImplTest {
     @InjectMocks
     private TestResultPrinterServiceImpl testResultPrinterService;
     @Mock
-    private IOService ioService;
-    @Mock
-    private MessageService messageService;
-    @Mock
-    private LocaleSettings localeSettings;
+    private MessageIOService messageIOService;
 
     private TestResult testResult;
     private static final String FORMAT_RESULT_CODE = "test.result";
@@ -46,24 +40,33 @@ class TestResultPrinterServiceImplTest {
     }
 
     @Test
-    @DisplayName("should print test result")
+    @DisplayName("should print test success result")
     void shouldPrintSuccessResult() {
-        Locale locale = Locale.ROOT;
-        when(localeSettings.getLocale())
-                .thenReturn(locale);
         String userName = testResult.getUser().getFirstName();
         String lastName = testResult.getUser().getLastName();
         int quantityOfRightAnsweredQuestions = testResult.getQuantityOfRightAnsweredQuestions();
         int quantityOfAnsweredQuestion = testResult.getQuantityOfAnsweredQuestions();
-        String result = "result";
-        lenient().when(messageService.getMessage(FORMAT_RESULT_CODE, new Object[]{userName, lastName, quantityOfRightAnsweredQuestions,
-                quantityOfAnsweredQuestion},locale))
-                .thenReturn(result);
-        String success = "success";
-        lenient().when(messageService.getMessage(SUCCESS_RESULT_CODE,new Object[]{},locale))
-                .thenReturn(success);
         testResultPrinterService.printResult(testResult);
-        verify(ioService, times(1)).outputText(result);
-        verify(ioService, times(1)).outputText(success);
+        verify(messageIOService, times(1)).outputMessageByCode(FORMAT_RESULT_CODE, userName,
+                lastName, quantityOfRightAnsweredQuestions,
+                quantityOfAnsweredQuestion);
+        verify(messageIOService, times(1)).outputMessageByCode(SUCCESS_RESULT_CODE);
+        verifyNoMoreInteractions(messageIOService);
+    }
+
+    @Test
+    @DisplayName("should print test fail result")
+    void shouldPrintFailResult() {
+        String userName = testResult.getUser().getFirstName();
+        String lastName = testResult.getUser().getLastName();
+        int quantityOfRightAnsweredQuestionsForFail = 2;
+        testResult.setQuantityOfRightAnsweredQuestions(quantityOfRightAnsweredQuestionsForFail);
+        int quantityOfAnsweredQuestion = testResult.getQuantityOfAnsweredQuestions();
+        testResultPrinterService.printResult(testResult);
+        verify(messageIOService, times(1)).outputMessageByCode(FORMAT_RESULT_CODE, userName,
+                lastName, quantityOfRightAnsweredQuestionsForFail,
+                quantityOfAnsweredQuestion);
+        verify(messageIOService, times(1)).outputMessageByCode(FAIL_RESULT_CODE);
+        verifyNoMoreInteractions(messageIOService);
     }
 }

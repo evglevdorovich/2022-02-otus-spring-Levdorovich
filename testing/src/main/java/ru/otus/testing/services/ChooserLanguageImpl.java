@@ -40,9 +40,8 @@ public class ChooserLanguageImpl implements ChooserLanguage {
     }
 
     private boolean isValidNumberForSizeOfMap(int sizeOfMap, String input) {
-        if (isNumber(input)) {
-            int number = Integer.parseInt(input);
-            return isCorrespondsToNumbersInMap(sizeOfMap, number);
+        if (isNumber(input) && isCorrespondsToNumbersInMap(sizeOfMap, Integer.parseInt(input))) {
+            return true;
         } else {
             messageIOService.outputMessageByCode(LANG_INCORRECT_NUMBER);
             return false;
