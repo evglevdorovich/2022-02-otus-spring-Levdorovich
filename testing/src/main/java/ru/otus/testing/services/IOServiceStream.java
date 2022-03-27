@@ -32,16 +32,11 @@ public class IOServiceStream implements IOService {
     }
 
     @Override
-    public void outputTextInFormat(String format, Object... args) {
-        output.printf(format, args);
-    }
-
-    @Override
-    public List<Integer> inputCommaSeparatedIntegersWithPrompt(String prompt) {
+    public List<Integer> inputCommaSeparatedIntegersWithPromptAndWarning(String prompt, String warning) {
         outputText(prompt);
         String strIntegers = inputText();
         if (!validateStringOfCommaSeparatedIntegers(strIntegers)) {
-            String message = "String :" + strIntegers + " is invalid ";
+            String message = strIntegers + warning;
             throw new InvalidStringOfCommaSeparatedIntegers(message);
         }
         return stringToIntegerNumberParser.stringToListInteger(strIntegers);

@@ -9,18 +9,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.testing.domain.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Class UserInfoServiceImplTest")
 @ExtendWith(MockitoExtension.class)
 class UserInfoServiceImplTest {
-
-    private static final String ENTER_FIRST_NAME_TEMPLATE = "please enter your first name:";
-    private static final String ENTER_SECOND_NAME_TEMPLATE = "please enter your lastName name:";
     @Mock
-    private IOService ioService;
+    private MessageIOService messageIOService;
+    private static final String ENTER_FIRST_NAME_CODE = "enter.firstName";
+    private static final String ENTER_LAST_NAME_CODE = "enter.lastName";
     @InjectMocks
     private UserInfoServiceImpl userInfoService;
 
@@ -28,12 +25,16 @@ class UserInfoServiceImplTest {
     @DisplayName("Should return expected User")
     void shouldReturnExpectedUser() {
         String expectedName = "name";
-        User user = new User(expectedName, expectedName);
-        given(ioService.inputText()).willReturn(expectedName);
-        userInfoService.askUserInfo();
-        verify(ioService, times(1)).outputText(ENTER_FIRST_NAME_TEMPLATE);
-        verify(ioService, times(1)).outputText(ENTER_SECOND_NAME_TEMPLATE);
-        assertThat(userInfoService.askUserInfo()).usingRecursiveComparison().isEqualTo(user);
+        String expectedSurname = "surname";
+        User expectedUser = new User(expectedName, expectedSurname);
+        when(messageIOService.inputText())
+                .thenReturn(expectedName).thenReturn(expectedSurname);
+        User user = userInfoService.askUserInfo();
+        verify(messageIOService, times(1)).outputMessageByCode(ENTER_FIRST_NAME_CODE);
+        verify(messageIOService, times(2)).inputText();
+        verify(messageIOService, times(1)).outputMessageByCode(ENTER_LAST_NAME_CODE);
+        verifyNoMoreInteractions(messageIOService);
+        assertThat(user).usingRecursiveComparison().isEqualTo(expectedUser);
     }
 
 }

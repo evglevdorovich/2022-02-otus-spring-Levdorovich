@@ -14,8 +14,7 @@ import ru.otus.testing.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Class TestResultPrinterServiceImplTest")
 @ExtendWith(MockitoExtension.class)
@@ -23,11 +22,12 @@ class TestResultPrinterServiceImplTest {
     @InjectMocks
     private TestResultPrinterServiceImpl testResultPrinterService;
     @Mock
-    private IOService ioService;
+    private MessageIOService messageIOService;
+
     private TestResult testResult;
-    private static final String FORMAT_RESULT = "Dear %s %s your result is %d/%d%n";
-    private static final String SUCCESS_RESULT = "You've passed the test.";
-    private static final String FAIL_RESULT = "You haven't passed the test.";
+    private static final String FORMAT_RESULT_CODE = "test.result";
+    private static final String SUCCESS_RESULT_CODE = "test.result.success";
+    private static final String FAIL_RESULT_CODE = "test.result.fail";
 
     @BeforeEach
     void setUp() {
@@ -40,23 +40,33 @@ class TestResultPrinterServiceImplTest {
     }
 
     @Test
-    @DisplayName("should print success result")
+    @DisplayName("should print test success result")
     void shouldPrintSuccessResult() {
-        testResultPrinterService.printResult(testResult);
         String userName = testResult.getUser().getFirstName();
         String lastName = testResult.getUser().getLastName();
         int quantityOfRightAnsweredQuestions = testResult.getQuantityOfRightAnsweredQuestions();
         int quantityOfAnsweredQuestion = testResult.getQuantityOfAnsweredQuestions();
-        verify(ioService, times(1)).outputTextInFormat(FORMAT_RESULT, userName, lastName, quantityOfRightAnsweredQuestions,
+        testResultPrinterService.printResult(testResult);
+        verify(messageIOService, times(1)).outputMessageByCode(FORMAT_RESULT_CODE, userName,
+                lastName, quantityOfRightAnsweredQuestions,
                 quantityOfAnsweredQuestion);
-        verify(ioService, times(1)).outputText(SUCCESS_RESULT);
+        verify(messageIOService, times(1)).outputMessageByCode(SUCCESS_RESULT_CODE);
+        verifyNoMoreInteractions(messageIOService);
     }
 
     @Test
-    @DisplayName("should print fail result")
+    @DisplayName("should print test fail result")
     void shouldPrintFailResult() {
-        testResult.setMinScore(4);
+        String userName = testResult.getUser().getFirstName();
+        String lastName = testResult.getUser().getLastName();
+        int quantityOfRightAnsweredQuestionsForFail = 2;
+        testResult.setQuantityOfRightAnsweredQuestions(quantityOfRightAnsweredQuestionsForFail);
+        int quantityOfAnsweredQuestion = testResult.getQuantityOfAnsweredQuestions();
         testResultPrinterService.printResult(testResult);
-        verify(ioService, times(1)).outputText(FAIL_RESULT);
+        verify(messageIOService, times(1)).outputMessageByCode(FORMAT_RESULT_CODE, userName,
+                lastName, quantityOfRightAnsweredQuestionsForFail,
+                quantityOfAnsweredQuestion);
+        verify(messageIOService, times(1)).outputMessageByCode(FAIL_RESULT_CODE);
+        verifyNoMoreInteractions(messageIOService);
     }
 }

@@ -1,0 +1,10 @@
+questions:
+  rootResourcePath: questions.csv
+  minScore: 3
+
+application:
+  locale:
+    defaultTagLocale: ru
+    languageToLocaleTag:
+      English:
+      Russian: ru

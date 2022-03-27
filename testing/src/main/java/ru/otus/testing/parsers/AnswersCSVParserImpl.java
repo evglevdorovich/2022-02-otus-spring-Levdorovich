@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class AnswersCSVParserImpl implements AnswersCSVParser{
+public class AnswersCSVParserImpl implements AnswersCSVParser {
     private static final int FIRST_ANSWER_POSITION = 1;
 
     @Override
@@ -18,6 +18,7 @@ public class AnswersCSVParserImpl implements AnswersCSVParser{
         }
         return answers;
     }
+
     private Answer parseAnswer(String[] answersCSV, int i) {
         return new Answer(answersCSV[i], Boolean.parseBoolean(answersCSV[i + 1]));
     }

@@ -13,18 +13,20 @@ import java.util.List;
 @Component
 public class QuestionAskingServiceImpl implements QuestionAskingService {
     private final int minimumScore;
-    private final IOService ioService;
+    private final MessageIOService messageIOService;
     private final QuestionViewConverter questionViewConverter;
     private final AnswersChecker answerChecker;
 
-    private static final String INSERT_PATTERN = "Insert numbers of right answers separated by commas: ";
+    private static final String INSERT_CODE = "insert.pattern";
+    private static final String INSERT_LIST_OF_INTEGER_EXCEPTION_WARN = "insert.listOfNumbers.exceptionPattern";
 
-    public QuestionAskingServiceImpl(@Value("${questions.minScore}") int minimumScore, IOService ioService,
-                                     QuestionViewConverter questionViewConverter, AnswersChecker answerChecker) {
+    public QuestionAskingServiceImpl(@Value("${questions.minScore}") int minimumScore,
+                                     QuestionViewConverter questionViewConverter, AnswersChecker answerChecker,
+                                     MessageIOService messageIOService) {
         this.minimumScore = minimumScore;
-        this.ioService = ioService;
         this.questionViewConverter = questionViewConverter;
         this.answerChecker = answerChecker;
+        this.messageIOService = messageIOService;
     }
 
     @Override
@@ -48,9 +50,10 @@ public class QuestionAskingServiceImpl implements QuestionAskingService {
         printQuestionWithPrompt(question);
         List<Integer> answersList;
         try {
-            answersList = ioService.inputCommaSeparatedIntegersWithPrompt(INSERT_PATTERN);
+            answersList = messageIOService.inputCommaSeparatedIntegersWithPromptAndWarning(INSERT_CODE,
+                    INSERT_LIST_OF_INTEGER_EXCEPTION_WARN);
         } catch (InvalidStringOfCommaSeparatedIntegers ex) {
-            ioService.outputText(ex.getMessage() + "\n");
+            messageIOService.outputText(ex.getMessage() + "\n");
             return getIntegerListWithAnswers(question);
         }
         return answersList;
@@ -58,6 +61,7 @@ public class QuestionAskingServiceImpl implements QuestionAskingService {
 
     private void printQuestionWithPrompt(Question question) {
         String questionView = questionViewConverter.getViewQuestion(question);
-        ioService.outputText(questionView);
+        messageIOService.outputText(questionView);
     }
+
 }
