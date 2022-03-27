@@ -6,33 +6,29 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
+import java.util.Map;
 
 @ConfigurationProperties(prefix = "questions")
 @Component
 @Setter
 @RequiredArgsConstructor
 public class QuestionResourceConfigImpl implements QuestionResourceConfig {
+    private Map<String, String> localeTagToResourcePath;
     private String rootResourcePath;
     private final LocaleSettings localeSettings;
 
     @Override
     public String getResourcePath() {
-        if (isCurrentRoot()) {
+        if (isRootLocale()){
             return rootResourcePath;
-        } else {
-            return getResourcePathForCurrentLocale();
+        }
+        else {
+            return localeTagToResourcePath.get(localeSettings.getLocale().getLanguage());
         }
     }
 
-    private String getResourcePathForCurrentLocale() {
-        int lastPointIndex = rootResourcePath.lastIndexOf('.');
-        String resourceName = rootResourcePath.substring(0,lastPointIndex);
-        String localName = "_" + localeSettings.getLocale().toLanguageTag();
-        String fileFormat = rootResourcePath.substring(lastPointIndex);
-        return resourceName + localName + fileFormat;
+    private boolean isRootLocale() {
+        return localeSettings.getLocale().equals(Locale.ROOT);
     }
 
-    private boolean isCurrentRoot() {
-        return Locale.ROOT.equals(localeSettings.getLocale());
-    }
 }

@@ -3,10 +3,9 @@ package ru.otus.testing.services;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.testing.converter.QuestionViewConverter;
 import ru.otus.testing.domain.Answer;
 import ru.otus.testing.domain.Question;
@@ -20,17 +19,18 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 @DisplayName("class QuestionAskingServiceImplTest:")
-@ExtendWith(MockitoExtension.class)
-@PropertySource("classpath:application.properties")
+@SpringBootTest
 class QuestionAskingServiceImplTest {
-    @Mock
+    @MockBean
     private MessageIOService messageIOService;
-    @Mock
+    @MockBean
     private QuestionViewConverter questionViewConverter;
-    @Mock
+    @MockBean
     private AnswersChecker answerChecker;
+    @Value("${questions.minScore}")
+    private int minimumScore;
 
-    private QuestionAskingServiceImpl questionAskingService;
+    private QuestionAskingService questionAskingService;
     private User user;
     private List<Question> questions;
     private TestResult expectedTestResult;
@@ -39,7 +39,6 @@ class QuestionAskingServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        int minimumScore = 3;
         questionAskingService = new QuestionAskingServiceImpl(minimumScore, questionViewConverter,
                 answerChecker, messageIOService);
         Question question1 = new Question("desc1", List.of(new Answer("desc1", true)));

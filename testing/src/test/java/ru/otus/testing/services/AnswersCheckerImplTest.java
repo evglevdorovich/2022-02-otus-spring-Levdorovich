@@ -3,10 +3,9 @@ package ru.otus.testing.services;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.testing.domain.Answer;
 import ru.otus.testing.helpers.ListComparer;
 
@@ -16,12 +15,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("class AnswersCheckerImplTest:")
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class AnswersCheckerImplTest {
-    @Mock
+    @MockBean
     private ListComparer listComparer;
-    @InjectMocks
-    private AnswersCheckerImpl answersChecker;
+    @Autowired
+    private AnswersChecker answersChecker;
     private List<Integer> numberedAnswers;
     private List<Answer> answers;
 
