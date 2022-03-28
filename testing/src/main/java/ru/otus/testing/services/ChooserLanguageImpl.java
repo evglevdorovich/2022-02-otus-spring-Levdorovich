@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.otus.testing.config.LocaleSettings;
 
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -19,11 +18,20 @@ public class ChooserLanguageImpl implements ChooserLanguage {
 
     @Override
     public Locale chooseLanguage() {
-        Map<String, String> languageToLocaleTag = localeSettings.getLanguageToLocaleTag();
-        Map<Integer, String> orderToLanguage = localeSettings.getOrderToLanguage();
+        List<String> availableLanguages = localeSettings.getAvailableLanguages();
+        Map<Integer, String> orderToLanguage = getOrderToLanguage(availableLanguages);
         Integer input = getSelectedNumberForLanguage(orderToLanguage);
         String language = orderToLanguage.get(input);
-        return Locale.forLanguageTag(languageToLocaleTag.get(language));
+        return Locale.forLanguageTag(localeSettings.getLocaleTagByLanguage(language));
+    }
+
+    private Map<Integer, String> getOrderToLanguage(List<String> languages) {
+        Map<Integer,String> orderToLanguage = new LinkedHashMap<>();
+        int initIndex = 1;
+        for (String language : languages) {
+            orderToLanguage.put(initIndex++, language);
+        }
+        return orderToLanguage;
     }
 
     private Integer getSelectedNumberForLanguage(Map<Integer, String> orderToLanguage) {

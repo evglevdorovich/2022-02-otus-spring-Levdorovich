@@ -3,48 +3,47 @@ package ru.otus.testing.services;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.testing.config.LocaleSettings;
 
-import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @DisplayName("class ChooserLanguageImplTest:")
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class ChooserLanguageImplTest {
 
     private static final String LANG_CHOOSER_CODE = "lang.choose";
     private static final String LANG_INCORRECT_NUMBER = "lang.warn.incorrectNumber";
-    @Mock
+    private static final String ENGLISH_LANGUAGE = "English";
+    private static final String RUSSIAN_LANGUAGE = "Russian";
+    @MockBean
     private LocaleSettings localeSettings;
-    @Mock
+    @MockBean
     private MessageIOService messageIOService;
-    @InjectMocks
-    private ChooserLanguageImpl chooserLanguage;
+    @Autowired
+    private ChooserLanguage chooserLanguage;
 
-    private Map<String, String> languageForLocaleTag;
-    private Map<Integer, String> orderToLanguage;
+    private List<String> availableLanguage;
     private String textPattern;
     private String invalidInputStringForExpectedNumber;
     private String validInputStringForExpectedNumber;
     private String ruTag;
 
+
     @BeforeEach
     void setUp() {
+        availableLanguage = new LinkedList<>();
+        availableLanguage.add(ENGLISH_LANGUAGE);
+        availableLanguage.add(RUSSIAN_LANGUAGE);
+
         ruTag = "ru";
-        languageForLocaleTag = new HashMap<>();
-        languageForLocaleTag.put("English", "");
-        languageForLocaleTag.put("Russian", "ru");
-        orderToLanguage = new HashMap<>();
-        orderToLanguage.put(1, "English");
-        orderToLanguage.put(2, "Russian");
         textPattern = "1 - English, 2 - Russian ";
         invalidInputStringForExpectedNumber = "2f";
         validInputStringForExpectedNumber = "2";
@@ -53,12 +52,12 @@ class ChooserLanguageImplTest {
     @Test
     @DisplayName("test chooseLanguage should change Locale with first incorrectInput")
     void shouldChangeLocaleWithFirstIncorrectNumber() {
-        when(localeSettings.getLanguageToLocaleTag())
-                .thenReturn(languageForLocaleTag);
-        when(localeSettings.getOrderToLanguage())
-                .thenReturn(orderToLanguage);
+        when(localeSettings.getAvailableLanguages())
+                .thenReturn(availableLanguage);
         when(messageIOService.inputText())
                 .thenReturn(invalidInputStringForExpectedNumber).thenReturn(validInputStringForExpectedNumber);
+        when(localeSettings.getLocaleTagByLanguage(RUSSIAN_LANGUAGE))
+                .thenReturn(ruTag);
 
         chooserLanguage.chooseLanguage();
 
