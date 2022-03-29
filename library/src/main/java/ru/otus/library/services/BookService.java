@@ -1,23 +1,17 @@
 package ru.otus.library.services;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.domain.Book;
 
 import java.util.List;
 
 public interface BookService {
-    @Transactional
     List<Book> getAll();
 
-    @Transactional
-    void update(Book book);
+    void update(long id, String bookName, long genreId, long authorId);
 
-    @Transactional
-    void insert(Book book);
+    void insert(String name, long genreId, long authorId);
 
-    @Transactional
     void deleteById(long id);
 
-    @Transactional
     Book getById(long id);
 }

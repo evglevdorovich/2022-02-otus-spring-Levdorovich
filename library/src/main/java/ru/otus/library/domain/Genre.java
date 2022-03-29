@@ -1,11 +1,16 @@
 package ru.otus.library.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Data
 public class Genre {
-    private final long id;
-    private final String name;
+    private long id;
+    private String name;
+
+    public Genre(long id) {
+        this.id = id;
+    }
 }

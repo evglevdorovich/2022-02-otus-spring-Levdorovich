@@ -3,24 +3,22 @@ package ru.otus.library.shell;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
 import ru.otus.library.converter.AuthorViewConverter;
 import ru.otus.library.converter.BookViewConverter;
 import ru.otus.library.converter.GenreViewConverter;
-import ru.otus.library.dao.AuthorDao;
-import ru.otus.library.dao.BookDao;
-import ru.otus.library.dao.GenreDao;
-import ru.otus.library.domain.Book;
 import ru.otus.library.exceptions.CannotUpdateException;
 import ru.otus.library.exceptions.EmptyResultException;
 import ru.otus.library.exceptions.InvalidDataForUpdateException;
+import ru.otus.library.services.AuthorService;
+import ru.otus.library.services.BookService;
+import ru.otus.library.services.GenreService;
 
 @ShellComponent
 @RequiredArgsConstructor
 public class ApplicationCommands {
-    private final BookDao bookDao;
-    private final GenreDao genreDao;
-    private final AuthorDao authorDao;
+    private final BookService bookService;
+    private final GenreService genreService;
+    private final AuthorService authorService;
     private final BookViewConverter bookViewConverter;
     private final GenreViewConverter genreViewConverter;
     private final AuthorViewConverter authorViewConverter;
@@ -34,7 +32,7 @@ public class ApplicationCommands {
     @ShellMethod(value = "get all genres", key = {"get-genres", "genres"})
     public String getAllGenres() {
         try {
-            return genreViewConverter.getViewGenres(genreDao.getAll());
+            return genreViewConverter.getViewGenres(genreService.getAll());
         } catch (EmptyResultException exception) {
             return exception.getMessage() + CHECK_ID_PROMPT;
         }
@@ -43,7 +41,7 @@ public class ApplicationCommands {
     @ShellMethod(value = "get all authors", key = {"get-authors", "authors"})
     public String getAllAuthors() {
         try {
-            return authorViewConverter.getViewAuthors(authorDao.getAll());
+            return authorViewConverter.getViewAuthors(authorService.getAll());
         } catch (EmptyResultException exception) {
             return exception.getMessage() + CHECK_ID_PROMPT;
         }
@@ -52,16 +50,16 @@ public class ApplicationCommands {
     @ShellMethod(value = "get all books", key = {"get-books", "books"})
     public String getAllBooks() {
         try {
-            return bookViewConverter.getViewBooks(bookDao.getAll());
+            return bookViewConverter.getViewBooks(bookService.getAll());
         } catch (EmptyResultException exception) {
             return exception.getMessage() + ", " + CHECK_ID_PROMPT;
         }
     }
 
     @ShellMethod(value = "insert book", key = {"insert-book", "ib"})
-    public String insert(String name, long authorId, long genreId, @ShellOption(defaultValue = "0") String id) {
+    public String insert(String name, long authorId, long genreId) {
         try {
-            bookDao.insert(new Book(Integer.parseInt(id), name, authorId, genreId));
+            bookService.insert(name, authorId, genreId);
         } catch (InvalidDataForUpdateException exception) {
             return exception.getMessage() + ", " + CHECK_THE_OTHERS_INSERT_PROMPT;
         } catch (CannotUpdateException exception) {
@@ -72,13 +70,13 @@ public class ApplicationCommands {
 
     @ShellMethod(value = "delete book", key = {"delete-book", "db"})
     public void deleteBookById(long id) {
-        bookDao.deleteById(id);
+        bookService.deleteById(id);
     }
 
     @ShellMethod(value = "get book", key = {"get-book", "gb"})
     public String getBookById(long id) {
         try {
-            var book = bookDao.getById(id);
+            var book = bookService.getById(id);
             return bookViewConverter.getViewBook(book);
         } catch (EmptyResultException exception) {
             return exception.getMessage() + CHECK_ID_PROMPT;
@@ -88,7 +86,7 @@ public class ApplicationCommands {
     @ShellMethod(value = "update book", key = {"update-book", "ub"})
     public String updateBookById(long id, String name, long genreId, long authorId) {
         try {
-            bookDao.update(new Book(id, name, genreId, authorId));
+            bookService.update(id, name, genreId, authorId);
         } catch (InvalidDataForUpdateException exception) {
             return exception.getMessage() + ", " + CHECK_THE_OTHERS_UPDATE_PROMPT;
         } catch (CannotUpdateException exception) {

@@ -4,12 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Data
 public class Book {
     private long id;
-    private final String name;
-    private final long genreId;
-    private final long authorId;
+    private String name;
+    private Author author;
+    private Genre genre;
+
+    public Book(String name, Author author, Genre genre) {
+        this.name = name;
+        this.author = author;
+        this.genre = genre;
+    }
 }

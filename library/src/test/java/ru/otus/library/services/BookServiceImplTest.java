@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.library.dao.BookDao;
+import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
+import ru.otus.library.domain.Genre;
 
 import static org.mockito.Mockito.verify;
 
@@ -36,8 +38,8 @@ class BookServiceImplTest {
     @DisplayName("call dao update book")
     @Test
     void shouldCallDaoUpdateBook() {
-        var book = new Book("book", 1, 1);
-        bookService.update(book);
+        var book = new Book(1, "book", new Author(1), new Genre(1));
+        bookService.update(book.getId(), book.getName(), book.getGenre().getId(), book.getAuthor().getId());
         verify(bookDao).update(book);
     }
 
@@ -52,8 +54,8 @@ class BookServiceImplTest {
     @DisplayName("call dao insert book")
     @Test
     void shouldCallDaoInsertBook() {
-        var book = new Book("book", 1, 1);
-        bookService.insert(book);
+        var book = new Book("book", new Author(1), new Genre(1));
+        bookService.insert(book.getName(), book.getAuthor().getId(), book.getGenre().getId());
         verify(bookDao).insert(book);
     }
 }

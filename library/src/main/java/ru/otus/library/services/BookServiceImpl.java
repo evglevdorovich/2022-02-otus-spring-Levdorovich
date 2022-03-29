@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.dao.BookDao;
+import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
+import ru.otus.library.domain.Genre;
 
 import java.util.List;
 
@@ -21,14 +23,14 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void update(Book book) {
-        bookDao.update(book);
+    public void update(long id, String bookName, long genreId, long authorId) {
+        bookDao.update(new Book(id, bookName, new Author(authorId), new Genre(genreId)));
     }
 
     @Transactional
     @Override
-    public void insert(Book book) {
-        bookDao.insert(book);
+    public void insert(String name, long genreId, long authorId) {
+        bookDao.insert(new Book(name, new Author(authorId), new Genre(genreId)));
     }
 
     @Transactional

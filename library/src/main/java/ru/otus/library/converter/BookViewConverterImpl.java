@@ -10,6 +10,8 @@ public class BookViewConverterImpl implements BookViewConverter {
     private final static String AUTHOR_ID = "author id";
     private final static String GENRE_ID = "genre id";
     private final static String ID = "id";
+    private final static String GENRE_NAME = "genre name";
+    private final static String AUTHOR_NAME = "author name";
 
     @Override
     public String getViewBooks(List<Book> books) {
@@ -36,11 +38,19 @@ public class BookViewConverterImpl implements BookViewConverter {
                 .append(", ")
                 .append(AUTHOR_ID)
                 .append(" - ")
-                .append(book.getAuthorId())
+                .append(book.getAuthor().getId())
+                .append(", ")
+                .append(AUTHOR_NAME)
+                .append(" - ")
+                .append(book.getAuthor().getName())
                 .append(", ")
                 .append(GENRE_ID)
                 .append(" - ")
-                .append(book.getGenreId())
+                .append(book.getGenre().getId())
+                .append(", ")
+                .append(GENRE_NAME)
+                .append(" - ")
+                .append(book.getGenre().getName())
                 .append("\n");
     }
 }
