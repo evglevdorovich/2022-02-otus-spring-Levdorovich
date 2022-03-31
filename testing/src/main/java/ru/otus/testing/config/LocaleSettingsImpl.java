@@ -6,15 +6,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
-@Component
-@Getter
 @Setter
+@Component
 @ConfigurationProperties(prefix = "application.locale")
 public class LocaleSettingsImpl implements LocaleSettings {
+    @Getter
     private Locale locale;
     private Map<String, String> languageToLocaleTag;
 
@@ -23,13 +21,12 @@ public class LocaleSettingsImpl implements LocaleSettings {
     }
 
     @Override
-    public Map<Integer, String> getOrderToLanguage() {
-        Map<Integer, String> orderToLanguage = new TreeMap<>();
-        int initIndex = 1;
-        for (String language : languageToLocaleTag.keySet()) {
-            orderToLanguage.put(initIndex++, language);
-        }
-        return orderToLanguage;
+    public List<String> getAvailableLanguages() {
+        return new ArrayList<>(languageToLocaleTag.keySet());
     }
 
+    @Override
+    public String getLocaleTagByLanguage(String language) {
+        return languageToLocaleTag.get(language);
+    }
 }

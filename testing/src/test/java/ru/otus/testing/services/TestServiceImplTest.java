@@ -2,39 +2,31 @@ package ru.otus.testing.services;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.testing.config.LocaleSettings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.testing.domain.Question;
 import ru.otus.testing.domain.TestResult;
 import ru.otus.testing.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @DisplayName("Class TestServiceImplTest")
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class TestServiceImplTest {
-    @Mock
+    @MockBean
     private QuestionService questionService;
-    @Mock
-    private UserInfoService userInfoService;
-    @Mock
+    @MockBean
     private QuestionAskingService questionAskingService;
-    @Mock
+    @MockBean
     private TestResultPrinterService testResultPrinterService;
-    @Mock
-    private ChooserLanguage chooserLanguage;
-    @Mock
-    private LocaleSettings localeSettings;
-    @InjectMocks
-    private TestServiceImpl testService;
+    @Autowired
+    private TestService testService;
 
     @Test
     @DisplayName("Should execute test")
@@ -46,22 +38,12 @@ class TestServiceImplTest {
         int minScore = 3;
         TestResult testResult = new TestResult(user, quantityOfRightAnsweredQuestions, quantityOfAnsweredQuestions,
                 questions, minScore);
-        Locale selectedLocale = Locale.ROOT;
-        given(chooserLanguage.chooseLanguage())
-                .willReturn(selectedLocale);
-        given(userInfoService.askUserInfo())
-                .willReturn(user);
         given(questionService.getAll())
                 .willReturn(questions);
         given(questionAskingService.askQuestions(questions, user))
                 .willReturn(testResult);
-        testService.executeTest();
-        verify(chooserLanguage).chooseLanguage();
-        verify(localeSettings).setLocale(selectedLocale);
-        verify(userInfoService).askUserInfo();
+        testService.executeTest(user);
         verify(questionService).getAll();
         verify(testResultPrinterService, times(1)).printResult(testResult);
-        verifyNoMoreInteractions(questionService, userInfoService, questionAskingService
-                , testResultPrinterService, localeSettings);
     }
 }
