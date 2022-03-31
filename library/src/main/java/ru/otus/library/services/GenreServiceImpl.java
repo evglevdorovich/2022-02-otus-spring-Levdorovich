@@ -13,7 +13,7 @@ import java.util.List;
 public class GenreServiceImpl implements GenreService {
     private final GenreDao genreDao;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<Genre> getAll() {
         return genreDao.getAll();

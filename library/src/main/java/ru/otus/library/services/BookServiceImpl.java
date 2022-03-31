@@ -15,7 +15,7 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
     private final BookDao bookDao;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<Book> getAll() {
         return bookDao.getAll();
@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
         bookDao.deleteById(id);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Book getById(long id) {
         return bookDao.getById(id);

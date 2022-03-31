@@ -13,7 +13,7 @@ import java.util.List;
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorDao authorDao;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<Author> getAll() {
         return authorDao.getAll();
