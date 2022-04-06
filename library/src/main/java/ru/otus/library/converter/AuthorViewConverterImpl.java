@@ -8,6 +8,7 @@ import java.util.List;
 @Component
 public class AuthorViewConverterImpl implements AuthorViewConverter {
     private static final String ID = "id";
+
     @Override
     public String getViewAuthors(List<Author> authors) {
         var sb = new StringBuilder();
