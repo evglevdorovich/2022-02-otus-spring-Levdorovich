@@ -5,12 +5,14 @@ import org.springframework.stereotype.Repository;
 import ru.otus.library.domain.Genre;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class GenreRepositoryJpa implements GenreRepository {
+    @PersistenceContext
     private final EntityManager entityManager;
 
     @Override

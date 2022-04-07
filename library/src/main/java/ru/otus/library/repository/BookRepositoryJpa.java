@@ -6,6 +6,7 @@ import ru.otus.library.domain.Book;
 import ru.otus.library.exceptions.InvalidDataForUpdateException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Repository
 public class BookRepositoryJpa implements BookRepository {
+    @PersistenceContext
     private final EntityManager entityManager;
 
     @Override
