@@ -3,46 +3,58 @@ package ru.otus.library.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.library.dao.BookDao;
-import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
-import ru.otus.library.domain.Genre;
+import ru.otus.library.exceptions.EmptyResultException;
+import ru.otus.library.exceptions.InvalidDataForUpdateException;
+import ru.otus.library.repository.AuthorRepository;
+import ru.otus.library.repository.BookRepository;
+import ru.otus.library.repository.GenreRepository;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-    private final BookDao bookDao;
+    private final BookRepository bookRepository;
+    private final GenreRepository genreRepository;
+    private final AuthorRepository authorRepository;
 
     @Transactional(readOnly = true)
     @Override
     public List<Book> getAll() {
-        return bookDao.getAll();
+        return bookRepository.getAll();
     }
 
     @Transactional
     @Override
-    public void update(long id, String bookName, long genreId, long authorId) {
-        bookDao.update(new Book(id, bookName, new Author(authorId), new Genre(genreId)));
+    public void update(long id, String name, long genreId, long authorId) {
+        var author = authorRepository.getById(authorId).orElseThrow(InvalidDataForUpdateException::new);
+        var genre = genreRepository.getById(genreId).orElseThrow(InvalidDataForUpdateException::new);
+        var book = bookRepository.getById(id).orElseThrow(InvalidDataForUpdateException::new);
+        book.setGenre(genre);
+        book.setAuthor(author);
+        book.setName(name);
+        bookRepository.saveOrUpdate(book);
     }
 
     @Transactional
     @Override
     public void insert(String name, long genreId, long authorId) {
-        bookDao.insert(new Book(name, new Author(authorId), new Genre(genreId)));
+        var genre = genreRepository.getById(genreId).orElseThrow(InvalidDataForUpdateException::new);
+        var author = authorRepository.getById(authorId).orElseThrow(InvalidDataForUpdateException::new);
+        bookRepository.saveOrUpdate(new Book(name, author, genre));
     }
 
     @Transactional
     @Override
     public void deleteById(long id) {
-        bookDao.deleteById(id);
+        bookRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Book getById(long id) {
-        return bookDao.getById(id);
+        return bookRepository.getById(id).orElseThrow(EmptyResultException::new);
     }
 
 

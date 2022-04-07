@@ -11,22 +11,35 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@NamedEntityGraph(name = "comment-book-entity-graph",
+        attributeNodes = {@NamedAttributeNode("book")})
 @Entity
-@Table(name = "genres")
-public class Genre {
+@Table(name = "comments")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
-    @Column(name = "name")
-    private String name;
+
+    @Column(name = "text")
+    private String text;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    @ToString.Exclude
+    private Book book;
+
+    public Comment(Book book, String text) {
+        this.book = book;
+        this.text = text;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Genre genre = (Genre) o;
-        return id != 0 && Objects.equals(id, genre.id);
+        Comment comment = (Comment) o;
+        return id != 0 && Objects.equals(id, comment.id);
     }
 
     @Override
