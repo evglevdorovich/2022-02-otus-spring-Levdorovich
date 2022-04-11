@@ -11,8 +11,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@NamedEntityGraph(name = "comment-book-entity-graph",
-        attributeNodes = {@NamedAttributeNode("book")})
 @Entity
 @Table(name = "comments")
 public class Comment {
