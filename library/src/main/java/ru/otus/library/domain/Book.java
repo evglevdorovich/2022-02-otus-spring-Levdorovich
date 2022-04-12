@@ -13,8 +13,6 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity
-@NamedEntityGraph(name = "book-authors-genres-entity-graph",
-        attributeNodes = {@NamedAttributeNode("author"), @NamedAttributeNode("genre")})
 @Table(name = "books")
 public class Book {
     @Id

@@ -37,55 +37,55 @@ class BookServiceImplTest {
     @Captor
     private ArgumentCaptor<Book> bookCaptor;
 
-    @DisplayName("call dao get all")
+    @DisplayName("call repository get all")
     @Test
-    void shouldCallDaoGetAll() {
+    void shouldCallRepositoryGetAll() {
         bookService.getAll();
-        verify(bookRepository).getAll();
+        verify(bookRepository).findAll();
     }
 
-    @DisplayName("call dao get by id")
+    @DisplayName("call repository get by id")
     @Test
-    void shouldCallDaoGetById() {
+    void shouldCallRepositoryGetById() {
         var id = 1L;
         var book = new Book();
-        when(bookRepository.getById(id)).thenReturn(Optional.of(book));
+        when(bookRepository.findById(id)).thenReturn(Optional.of(book));
         bookService.getById(id);
-        verify(bookRepository).getById(id);
+        verify(bookRepository).findById(id);
     }
 
     @DisplayName("throw EmptyResultException while getting empty book for getById")
     @Test
-    void shouldThrowEmptyResultExceptionForEmptyResultGetById() {
+    void shouldThrowEmptyResultExceptionForEmptyResultFindById() {
         var id = 1;
-        when(bookRepository.getById(id))
+        when(bookRepository.findById(id))
                 .thenReturn(Optional.empty());
         assertThatThrownBy(() -> bookService.getById(id)).isInstanceOf(EmptyResultException.class);
     }
 
     @DisplayName("call dao delete by id")
     @Test
-    void shouldCallDaoDeleteByIdBook() {
-        var id = 1;
+    void shouldCallRepositoryDeleteByIdBook() {
+        var id = 1L;
         bookService.deleteById(id);
-        verify(bookRepository).deleteById(id);
+        verify(bookRepository).deleteExistingBookById(id);
     }
 
     @DisplayName("call dao saveOrUpdate book in insert method")
     @Test
-    void shouldCallDaoSaveOrUpdateBookInInsert() {
+    void shouldCallRepositorySaveBookInInsert() {
         var id = 1L;
         var bookName = "bookName";
         var author = new Author(id, "name");
         var genre = new Genre(id, "name");
         var book = new Book(bookName, author, genre);
 
-        when(genreRepository.getById(id)).thenReturn(Optional.of(genre));
-        when(authorRepository.getById(id)).thenReturn(Optional.of(author));
+        when(genreRepository.findById(id)).thenReturn(Optional.of(genre));
+        when(authorRepository.findById(id)).thenReturn(Optional.of(author));
 
         bookService.insert(book.getName(), book.getGenre().getId(), book.getAuthor().getId());
 
-        verify(bookRepository).saveOrUpdate(bookCaptor.capture());
+        verify(bookRepository).save(bookCaptor.capture());
 
         assertThat(bookCaptor.getValue()).usingRecursiveComparison().isEqualTo(book);
     }
@@ -94,7 +94,7 @@ class BookServiceImplTest {
     @Test
     void shouldThrowInvalidDataForUpdateExceptionWithUnExistingGenreInInsert() {
         var id = 1L;
-        when(genreRepository.getById(id)).thenReturn(Optional.empty());
+        when(genreRepository.findById(id)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> bookService.insert("name", id, id))
                 .isInstanceOf(InvalidDataForUpdateException.class);
     }
@@ -103,7 +103,7 @@ class BookServiceImplTest {
     @Test
     void shouldThrowInvalidDataForUpdateExceptionWithUnExistingAuthorInInsert() {
         var id = 1L;
-        when(authorRepository.getById(id)).thenReturn(Optional.empty());
+        when(authorRepository.findById(id)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> bookService.insert("name", id, id))
                 .isInstanceOf(InvalidDataForUpdateException.class);
     }
@@ -117,13 +117,13 @@ class BookServiceImplTest {
         var genre = new Genre(id, "name");
         var expectedBook = new Book(id, bookName, author, genre);
 
-        when(bookRepository.getById(id)).thenReturn(Optional.of(expectedBook));
-        when(genreRepository.getById(id)).thenReturn(Optional.of(genre));
-        when(authorRepository.getById(id)).thenReturn(Optional.of(author));
+        when(bookRepository.findById(id)).thenReturn(Optional.of(expectedBook));
+        when(genreRepository.findById(id)).thenReturn(Optional.of(genre));
+        when(authorRepository.findById(id)).thenReturn(Optional.of(author));
 
         bookService.update(id, expectedBook.getName(), expectedBook.getGenre().getId(), expectedBook.getAuthor().getId());
 
-        verify(bookRepository).saveOrUpdate(bookCaptor.capture());
+        verify(bookRepository).save(bookCaptor.capture());
         assertThat(bookCaptor.getValue()).usingRecursiveComparison().isEqualTo(expectedBook);
 
     }
@@ -132,7 +132,7 @@ class BookServiceImplTest {
     @Test
     void shouldCallInvalidDataForUpdateExceptionInUpdateWithUnExistingAuthor() {
         var id = 1L;
-        when(authorRepository.getById(id)).thenReturn(Optional.empty());
+        when(authorRepository.findById(id)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> bookService.update(id, "name", id, id))
                 .isInstanceOf(InvalidDataForUpdateException.class);
 
@@ -142,7 +142,7 @@ class BookServiceImplTest {
     @Test
     void shouldCallInvalidDataForUpdateExceptionInUpdateWithUnExistingGenre() {
         var id = 1L;
-        when(genreRepository.getById(id)).thenReturn(Optional.empty());
+        when(genreRepository.findById(id)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> bookService.update(id, "name", id, id))
                 .isInstanceOf(InvalidDataForUpdateException.class);
 
@@ -152,7 +152,7 @@ class BookServiceImplTest {
     @Test
     void shouldCallInvalidDataForUpdateExceptionInUpdateWithUnExistingBook() {
         var id = 1L;
-        when(bookRepository.getById(id)).thenReturn(Optional.empty());
+        when(bookRepository.findById(id)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> bookService.update(id, "name", id, id))
                 .isInstanceOf(InvalidDataForUpdateException.class);
 

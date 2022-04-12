@@ -13,12 +13,12 @@ spring:
         web-allow-others: true
       enabled: true
   jpa:
-    generate-ddl: false
+    generate-ddl: true
     hibernate:
       ddl-auto: validate
 
     properties:
       hibernate:
-        format_sql: false
+        format_sql: true
 
-    show-sql: false
+    show-sql: true

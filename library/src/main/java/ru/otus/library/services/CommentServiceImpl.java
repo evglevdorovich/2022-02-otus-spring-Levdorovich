@@ -20,34 +20,34 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(readOnly = true)
     public Comment getById(long id) {
-        return commentRepository.getById(id).orElseThrow(EmptyResultException::new);
+        return commentRepository.findById(id).orElseThrow(EmptyResultException::new);
     }
 
     @Override
     @Transactional
     public void deleteById(long id) {
-        commentRepository.deleteById(id);
+        commentRepository.deleteExistingCommentById(id);
     }
 
     @Override
     @Transactional
     public void save(long bookId, String text) {
-        var book = bookRepository.getById(bookId).orElseThrow(InvalidDataForUpdateException::new);
+        var book = bookRepository.findById(bookId).orElseThrow(InvalidDataForUpdateException::new);
         var comment = new Comment(book, text);
-        commentRepository.saveOrUpdate(comment);
+        commentRepository.save(comment);
     }
 
     @Override
     @Transactional
     public void update(long commentId, String updatedText) {
-        var comment = commentRepository.getById(commentId).orElseThrow(InvalidDataForUpdateException::new);
+        var comment = commentRepository.findById(commentId).orElseThrow(InvalidDataForUpdateException::new);
         comment.setText(updatedText);
-        commentRepository.saveOrUpdate(comment);
+        commentRepository.save(comment);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Comment> getByBookId(long bookId) {
-        return commentRepository.getByBookId(bookId);
+        return commentRepository.findAllByBookId(bookId);
     }
 }

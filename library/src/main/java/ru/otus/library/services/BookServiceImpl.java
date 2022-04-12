@@ -22,39 +22,39 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public List<Book> getAll() {
-        return bookRepository.getAll();
+        return bookRepository.findAll();
     }
 
     @Transactional
     @Override
     public void update(long id, String name, long genreId, long authorId) {
-        var author = authorRepository.getById(authorId).orElseThrow(InvalidDataForUpdateException::new);
-        var genre = genreRepository.getById(genreId).orElseThrow(InvalidDataForUpdateException::new);
-        var book = bookRepository.getById(id).orElseThrow(InvalidDataForUpdateException::new);
+        var author = authorRepository.findById(authorId).orElseThrow(InvalidDataForUpdateException::new);
+        var genre = genreRepository.findById(genreId).orElseThrow(InvalidDataForUpdateException::new);
+        var book = bookRepository.findById(id).orElseThrow(InvalidDataForUpdateException::new);
         book.setGenre(genre);
         book.setAuthor(author);
         book.setName(name);
-        bookRepository.saveOrUpdate(book);
+        bookRepository.save(book);
     }
 
     @Transactional
     @Override
     public void insert(String name, long genreId, long authorId) {
-        var genre = genreRepository.getById(genreId).orElseThrow(InvalidDataForUpdateException::new);
-        var author = authorRepository.getById(authorId).orElseThrow(InvalidDataForUpdateException::new);
-        bookRepository.saveOrUpdate(new Book(name, author, genre));
+        var genre = genreRepository.findById(genreId).orElseThrow(InvalidDataForUpdateException::new);
+        var author = authorRepository.findById(authorId).orElseThrow(InvalidDataForUpdateException::new);
+        bookRepository.save(new Book(name, author, genre));
     }
 
     @Transactional
     @Override
     public void deleteById(long id) {
-        bookRepository.deleteById(id);
+        bookRepository.deleteExistingBookById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Book getById(long id) {
-        return bookRepository.getById(id).orElseThrow(EmptyResultException::new);
+        return bookRepository.findById(id).orElseThrow(EmptyResultException::new);
     }
 
 
