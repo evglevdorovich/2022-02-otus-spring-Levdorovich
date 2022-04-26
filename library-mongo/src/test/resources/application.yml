@@ -9,7 +9,7 @@ spring:
       version: 3.5.5
     data:
       mongodb:
-        port: 0
+        port: 27017
         database: test
 mongock:
   runner-type: "InitializingBean"

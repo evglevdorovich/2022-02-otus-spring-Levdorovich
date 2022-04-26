@@ -69,12 +69,18 @@ public class InitMongoDBDataChangeLog {
 
     @ChangeSet(order = "004", id = "initComments", author = "jack", runAlways = true)
     public void initComments(CommentRepository repository) {
-        repository.saveComment(new Comment(firstBook, "bad"));
-        repository.saveComment(new Comment(firstBook, "good"));
-        repository.saveComment(new Comment(secondBook, "very bad"));
-        repository.saveComment(new Comment(thirdBook, "very good"));
-        repository.saveComment(new Comment(fourthBook, "amazing"));
-        repository.saveComment(new Comment(fifthBook, "excellent"));
+        var partialFirstBook = new Book(firstBook.getId(),firstBook.getName(),null,null);
+        var partialSecondBook = new Book(secondBook.getId(),secondBook.getName(),null,null);
+        var partialThirdBook = new Book(thirdBook.getId(),thirdBook.getName(),null,null);
+        var partialFourthBook = new Book(fourthBook.getId(),fourthBook.getName(),null,null);
+        var partialFifthBook = new Book(fifthBook.getId(),fifthBook.getName(),null,null);
+
+        repository.saveComment(new Comment(partialFirstBook, "bad"));
+        repository.saveComment(new Comment(partialFirstBook, "good"));
+        repository.saveComment(new Comment(partialSecondBook, "very bad"));
+        repository.saveComment(new Comment(partialThirdBook, "very good"));
+        repository.saveComment(new Comment(partialFourthBook, "amazing"));
+        repository.saveComment(new Comment(partialFifthBook, "excellent"));
     }
 
     @ChangeSet(order = "005", id = "addIndexes", author = "jack", runAlways = true)

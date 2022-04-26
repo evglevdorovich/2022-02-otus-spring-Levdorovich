@@ -22,7 +22,6 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
     public Comment saveComment(Comment comment) {
         var bookId = comment.getBook().getId();
         comment.setId(new ObjectId().toHexString());
-        comment.setBook(null);
         var update = new Update().addToSet("comments", comment);
         mongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(bookId)),
                 update, "books");

@@ -6,7 +6,7 @@ spring:
     allow-circular-references: true
   data:
     mongodb:
-      port: 0
+      port: 27017
       database: library
 
 mongock:

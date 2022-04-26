@@ -5,5 +5,4 @@ import ru.otus.library.model.Book;
 
 
 public interface BookRepository extends MongoRepository<Book, String>, BookRepositoryCustom {
-
 }

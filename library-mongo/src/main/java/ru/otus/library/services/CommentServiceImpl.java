@@ -27,7 +27,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void saveComment(String bookId, String text) {
-        var book = bookRepository.findById(bookId).orElseThrow(InvalidDataForUpdateException::new);
+        var book = bookRepository.findPartialBookById(bookId).orElseThrow(InvalidDataForUpdateException::new);
         var comment = new Comment(book, text);
         commentRepository.saveComment(comment);
     }
@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void update(String bookId, String commentId, String updatedText) {
-        var book = bookRepository.findById(bookId).orElseThrow(InvalidDataForUpdateException::new);
+        var book = bookRepository.findPartialBookById(bookId).orElseThrow(InvalidDataForUpdateException::new);
         var comment = new Comment(commentId, updatedText, book);
         commentRepository.updateComment(comment);
     }
