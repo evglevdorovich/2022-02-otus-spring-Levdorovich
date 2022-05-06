@@ -25,12 +25,12 @@ databaseChangeLog:
               constraints:
                 nullable: false
       changes:
-          - addForeignKeyConstraint:
-              baseColumnNames: book_id
-              baseTableName: comments
-              constraintName: fk_comments_books
-              onDelete: CASCADE
-              onUpdate: CASCADE
-              referencedColumnNames: id
-              referencedTableName: books
-              validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: comments
+            constraintName: fk_comments_books
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: books
+            validate: true

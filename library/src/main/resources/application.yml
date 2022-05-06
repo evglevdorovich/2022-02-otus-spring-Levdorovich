@@ -1,7 +1,7 @@
 spring:
   shell:
     interactive:
-      enabled: true
+      enabled: false
   main:
     allow-circular-references: true
   datasource:
@@ -11,7 +11,7 @@ spring:
       path: /h2-console
       settings:
         web-allow-others: true
-      enabled: true
+      enabled: false
   jpa:
     generate-ddl: true
     hibernate:
@@ -21,4 +21,4 @@ spring:
       hibernate:
         format_sql: true
 
-    show-sql: true
+    show-sql: false
