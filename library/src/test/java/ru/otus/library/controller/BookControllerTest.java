@@ -52,7 +52,7 @@ public class BookControllerTest {
                 .andExpect(content().string(containsString(author.getName())))
                 .andExpect(content().string(containsString(genre.getName())))
                 .andExpect(content().string(containsString(book.getName())))
-                .andExpect(content().string(containsString(book.getId() + "")));
+                .andExpect(content().string(containsString(Long.toString(book.getId()))));
     }
 
     @DisplayName("correct edit book")

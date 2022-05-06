@@ -48,7 +48,7 @@ class CommentControllerTest {
         mvc.perform(get("/comments/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(commentDto.getText())))
-                .andExpect(content().string(containsString(commentDto.getId() + "")));
+                .andExpect(content().string(containsString(Long.toString(commentDto.getId()))));
     }
 
 }
