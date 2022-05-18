@@ -1,9 +1,4 @@
 spring:
-  shell:
-    interactive:
-      enabled: false
-  main:
-    allow-circular-references: true
   datasource:
     url: jdbc:h2:mem:testdb
   h2:

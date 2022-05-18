@@ -40,6 +40,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public void insert(String name, long genreId, long authorId) {
+        System.out.println(name + genreId + authorId);
         var genre = genreRepository.findById(genreId).orElseThrow(InvalidDataForUpdateException::new);
         var author = authorRepository.findById(authorId).orElseThrow(InvalidDataForUpdateException::new);
         bookRepository.save(new Book(name, author, genre));
