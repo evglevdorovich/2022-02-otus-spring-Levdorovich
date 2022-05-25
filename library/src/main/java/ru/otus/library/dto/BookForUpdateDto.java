@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BookForUpdateDto {
     private String name;
-    private long genreId;
-    private long authorId;
+    private String genreId;
+    private String authorId;
 }

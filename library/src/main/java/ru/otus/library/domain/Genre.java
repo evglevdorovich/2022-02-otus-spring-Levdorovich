@@ -1,36 +1,26 @@
 package ru.otus.library.domain;
 
-import lombok.*;
-import org.hibernate.Hibernate;
-
-import javax.persistence.*;
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
-@Entity
-@Table(name = "genres")
+@Data
+@Document("genres")
 public class Genre {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
-    @Column(name = "name")
+    private String id;
+
+    @Field(name = "name")
+    @Indexed(unique = true)
     private String name;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Genre genre = (Genre) o;
-        return id != 0 && Objects.equals(id, genre.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
+    public Genre(String name) {
+        this.name = name;
     }
 }
