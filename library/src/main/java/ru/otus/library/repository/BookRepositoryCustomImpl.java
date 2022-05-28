@@ -18,9 +18,4 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
                 new Update().set("name", book.getName()).set("author", book.getAuthor()).set("genre", book.getGenre()),
                 Book.class);
     }
-
-    @Override
-    public Mono<Void> deleteBookById(String id) {
-        return mongoTemplate.remove(Query.query(Criteria.where("_id").is(id)), Book.class).then();
-    }
 }

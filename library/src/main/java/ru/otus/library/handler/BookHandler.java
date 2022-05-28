@@ -49,7 +49,7 @@ public class BookHandler {
     @Nonnull
     public Mono<ServerResponse> deleteById(ServerRequest serverRequest) {
         var id = serverRequest.pathVariable("id");
-        return bookRepository.deleteBookById(id)
+        return bookRepository.deleteById(id)
                 .flatMap(val -> ServerResponse.ok().build());
     }
 
@@ -69,6 +69,7 @@ public class BookHandler {
                         .body(BodyInserters.fromValue(book)));
     }
 
+
     @Nonnull
     public Mono<ServerResponse> updateBook(ServerRequest serverRequest) {
         var bookId = serverRequest.pathVariable("id");
@@ -84,6 +85,5 @@ public class BookHandler {
                 .switchIfEmpty(ServerResponse.notFound().build());
 
     }
-
 
 }

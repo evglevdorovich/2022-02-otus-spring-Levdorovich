@@ -1,14 +1,14 @@
 package ru.otus.library.configuration.router;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import lombok.val;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -26,13 +26,12 @@ import ru.otus.library.repository.AuthorRepository;
 import ru.otus.library.repository.BookRepository;
 import ru.otus.library.repository.GenreRepository;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = {BookRouter.class, ObjectMapper.class, BookHandler.class})
+@WebFluxTest({BookRouter.class, BookHandler.class})
 @DisplayName("Book Router should")
 class BookRouterTest {
     @Autowired
@@ -44,26 +43,26 @@ class BookRouterTest {
     @MockBean
     private GenreRepository genreRepository;
     @Autowired
-    private ObjectMapper objectMapper;
+    private Gson gson;
     @Captor
     private ArgumentCaptor<Book> bookCaptor;
 
     private WebTestClient client;
 
-    @PostConstruct
+    @BeforeEach
     private void init() {
         client = WebTestClient.bindToRouterFunction(booksRoute).build();
     }
 
     @Test
     @DisplayName("should return correct getBooks response")
-    void getBooksShouldReturnCorrectBooksResponse() throws JsonProcessingException {
+    void getBooksShouldReturnCorrectBooksResponse() {
         val uriPattern = "/api/books";
         val genre = new Genre("genreName");
         val author = new Author("authorName");
         val books = List.of(new Book("1", "name", author, genre));
         val bookFlux = Flux.just(books.get(0));
-        val jsonBooks = objectMapper.writeValueAsString(books);
+        val jsonBooks = gson.toJson(books);
 
         when(bookRepository.findAll()).thenReturn(bookFlux);
 
@@ -77,14 +76,14 @@ class BookRouterTest {
 
     @Test
     @DisplayName("should return correct getBook response")
-    void getBookShouldReturnCorrectBooksResponse() throws JsonProcessingException {
+    void getBookShouldReturnCorrectBooksResponse() {
         val bookId = "bookId";
         val uriPattern = "/api/books/" + bookId;
         val genre = new Genre("genreName");
         val author = new Author("authorName");
         val book = new Book(bookId, "name", author, genre);
         val bookMono = Mono.just(book);
-        val jsonBook = objectMapper.writeValueAsString(book);
+        val jsonBook = gson.toJson(book);
 
         when(bookRepository.findById(bookId)).thenReturn(bookMono);
 
@@ -98,10 +97,10 @@ class BookRouterTest {
 
     @Test
     @DisplayName("should return correct delete response")
-    void deleteBookShouldReturnCorrectBooksResponse() throws JsonProcessingException {
+    void deleteBookShouldReturnCorrectBooksResponse() {
         val bookId = "bookId";
         val uriPattern = "/api/books/" + bookId;
-        when(bookRepository.deleteBookById(bookId)).thenReturn(Mono.empty());
+        when(bookRepository.deleteById(bookId)).thenReturn(Mono.empty());
 
         client.delete()
                 .uri(uriPattern)
@@ -112,7 +111,7 @@ class BookRouterTest {
 
     @Test
     @DisplayName("should return correct postBook response")
-    void postBookShouldReturnCorrectBooksResponse() throws JsonProcessingException {
+    void postBookShouldReturnCorrectBooksResponse() {
         val bookId = "bookId";
         val uriPattern = "/api/books/";
         val bookName = "bookName";
@@ -126,7 +125,7 @@ class BookRouterTest {
         bookDto.setAuthorId(author.getId());
         bookDto.setGenreId(genre.getId());
 
-        val jsonBook = objectMapper.writeValueAsString(book);
+        val jsonBook = gson.toJson(book);
 
         when(genreRepository.findById(bookDto.getGenreId())).thenReturn(Mono.just(genre));
         when(authorRepository.findById(bookDto.getGenreId())).thenReturn(Mono.just(author));
@@ -144,7 +143,7 @@ class BookRouterTest {
 
     @Test
     @DisplayName("Should return correct putBook response")
-    void putBookShouldReturnCorrectBooksResponse() throws JsonProcessingException {
+    void putBookShouldReturnCorrectBooksResponse() {
         val bookId = "bookId";
         val uriPattern = "/api/books/" + bookId;
         val bookName = "bookName";
@@ -177,7 +176,6 @@ class BookRouterTest {
         val uriPattern = "/api/book/" + unExistedId;
 
         when(bookRepository.findById(unExistedId)).thenReturn(Mono.empty());
-
         client.get()
                 .uri(uriPattern)
                 .accept(MediaType.APPLICATION_JSON)
@@ -187,7 +185,7 @@ class BookRouterTest {
 
     @Test
     @DisplayName("unExisted book for put should return not found")
-    void putUnExistedBookShouldReturnNotFound() throws JsonProcessingException {
+    void putUnExistedBookShouldReturnNotFound() {
         val bookId = "bookId";
         val uriPattern = "/api/books/" + bookId;
         val bookName = "bookName";

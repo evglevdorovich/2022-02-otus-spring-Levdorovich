@@ -8,6 +8,4 @@ import java.util.Optional;
 
 public interface BookRepositoryCustom {
     Mono<Book> update(Book book);
-
-    Mono<Void> deleteBookById(String id);
 }
