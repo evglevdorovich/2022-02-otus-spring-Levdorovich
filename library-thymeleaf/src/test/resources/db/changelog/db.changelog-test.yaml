@@ -8,6 +8,13 @@ databaseChangeLog:
   - include:
       file: db/changelog/2.0/2022-04-04--Create-comments_table.yaml
   - include:
+      file: db/changelog/3.0/2022-06-01--Create-users_table.yaml
+  - include:
+      file: db/changelog/3.0/2022-06-01--Create-authorities_table.yaml
+  - include:
+      file: db/changelog/3.0/2022-06-01--Create-users-authorities_table.yaml
+
+  - include:
       file: db/changelog/data/2022-03-28--Add-authors-test.yaml
   - include:
       file: db/changelog/data/2022-03-28--Add-genres-test.yaml
@@ -15,3 +22,9 @@ databaseChangeLog:
       file: db/changelog/data/2022-03-28--Add-books-test.yaml
   - include:
       file: db/changelog/data/2022-04-04--Add-comments-test.yaml
+  - include:
+      file: db/changelog/data/2022-06-01--Add-users.yaml
+  - include:
+      file: db/changelog/data/2022-06-01--Add-authorities.yaml
+  - include:
+      file: db/changelog/data/2022-06-01--Add-users-authorities.yaml
