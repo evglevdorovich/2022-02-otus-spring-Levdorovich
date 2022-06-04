@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/1.0/2022-03-28--Create-authors_table.yaml
+  - include:
+      file: db/changelog/1.0/2022-03-28--Create-genres_table.yaml
+  - include:
+      file: db/changelog/1.0/2022-03-28--Create-books_table.yaml
+  - include:
+      file: db/changelog/2.0/2022-04-04--Create-comments_table.yaml
+  - include:
+      file: db/changelog/3.0/2022-06-01--Create-users_table.yaml
+  - include:
+     file: db/changelog/3.0/2022-06-01--Create-authorities_table.yaml
+  - include:
+      file: db/changelog/3.0/2022-06-01--Create-users-authorities_table.yaml
+
+  - include:
+      file: db/changelog/data/2022-03-28--Add-authors.yaml
+  - include:
+      file: db/changelog/data/2022-03-28--Add-genres.yaml
+  - include:
+      file: db/changelog/data/2022-03-28--Add-books.yaml
+  - include:
+      file: db/changelog/data/2022-04-04--Add-comments.yaml
+  - include:
+      file: db/changelog/data/2022-06-01--Add-users.yaml
+  - include:
+      file: db/changelog/data/2022-06-01--Add-authorities.yaml
+  - include:
+      file: db/changelog/data/2022-06-01--Add-users-authorities.yaml

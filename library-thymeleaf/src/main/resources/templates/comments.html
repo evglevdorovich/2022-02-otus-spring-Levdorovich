@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Comments</title>
+    <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}">
+</head>
+<body>
+<div class="flex flex--comment-table">
+    <table class="comments-table">
+        <caption class="comments-table--caption">Comments</caption>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Text</th>
+        </tr>
+        </thead>
+        <tbody th:each="comment : ${comments}">
+        <tr>
+            <td th:text="${comment.id}">1</td>
+            <td th:text="${comment.text}">Very good comment</td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="library.html" th:href="@{/}">
+        <img class="return-icon" src="../static/return-icon.svg" th:src="@{/return-icon.svg}" alt="return-icon">
+    </a>
+</div>
+</body>
+</html>
