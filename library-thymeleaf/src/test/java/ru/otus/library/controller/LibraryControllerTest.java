@@ -70,10 +70,4 @@ class LibraryControllerTest {
                 .andExpect(content().string(containsString(bookDto.getName())));
     }
 
-    @Test
-    @DisplayName("return 401 for unauthenticated user")
-    void unauthenticatedUserShouldReturnForbiddenForLibrary() throws Exception {
-        mvc.perform(get("/"))
-                .andExpect(status().isUnauthorized());
-    }
 }

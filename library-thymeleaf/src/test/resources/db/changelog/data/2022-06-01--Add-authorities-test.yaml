@@ -1,12 +1,12 @@
 databaseChangeLog:
   - changeSet:
-      id: 2022-06-01--Add-authorities
+      id: 2022-06-01--Add-authorities-test
       author: levjack1995
       context: v1.0
       runOnChange: true
       loadUpdateData:
         primaryKey: id
-        file: data/2022-06-01--authorities.csv
+        file: data/2022-06-01--authorities-test.csv
         relativeToChangelogFile: true
         separator: ;
         quotChar: '"'

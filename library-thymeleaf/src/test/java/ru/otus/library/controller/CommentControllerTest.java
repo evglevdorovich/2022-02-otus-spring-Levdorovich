@@ -56,10 +56,4 @@ class CommentControllerTest {
                 .andExpect(content().string(containsString(Long.toString(commentDto.getId()))));
     }
 
-    @Test
-    @DisplayName("return 401 for unauthenticated user for comments")
-    void unauthenticatedUserShouldReturnForbiddenForComments() throws Exception {
-        mvc.perform(get("/comments/1"))
-                .andExpect(status().isUnauthorized());
-    }
 }

@@ -25,7 +25,6 @@ public class ApplicationUser implements UserDetails {
     private String password;
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
-    @Column(name = "authorities")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_authorities",

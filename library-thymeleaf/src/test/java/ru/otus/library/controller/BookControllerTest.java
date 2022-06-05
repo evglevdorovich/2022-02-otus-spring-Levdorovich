@@ -116,47 +116,4 @@ class BookControllerTest {
         verify(bookService).deleteById(bookId);
     }
 
-    @Test
-    @DisplayName("return 401 for unauthenticated user for deleting book")
-    void unauthenticatedUserShouldReturnForbiddenForDeletingBook() throws Exception {
-        mvc.perform(post("/books/delete/1")
-                        .with(csrf()))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @DisplayName("return 401 for unauthenticated user for creating book")
-    void unauthenticatedUserShouldReturnForbiddenForCreatingBook() throws Exception {
-        var authorId = "1";
-        var genreId = "1";
-        var bookName = "bookName";
-        mvc.perform(post("/books/delete/1")
-                        .param("name", bookName)
-                        .param("authorId", authorId)
-                        .param("genreId", genreId)
-                        .with(csrf()))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @DisplayName("return 401 for unauthenticated user for editing book")
-    void unauthenticatedUserShouldReturnForbiddenForEditingBook() throws Exception {
-        var authorId = "1";
-        var genreId = "1";
-        var bookName = "bookName";
-        mvc.perform(post("/books/edit/1")
-                        .param("name", bookName)
-                        .param("genreId", genreId)
-                        .param("authorId", authorId)
-                        .with(csrf()))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @DisplayName("return 401 for unauthenticated user for displaying book")
-    void unauthenticatedUserShouldReturnForbiddenForDisplayingBook() throws Exception {
-        mvc.perform(get("/books/1"))
-                .andExpect(status().isUnauthorized());
-    }
-
 }
