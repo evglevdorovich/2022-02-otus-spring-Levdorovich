@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-06-01--Add-users-test
+      author: levjack1995
+      context: v1.0
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2022-06-01--users-test.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: users

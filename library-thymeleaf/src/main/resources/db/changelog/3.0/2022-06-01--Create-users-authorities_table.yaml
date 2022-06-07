@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-06-01--Create-users-authorities_table
+      author: levjack1995
+      createTable:
+        tableName: users_authorities
+        columns:
+          - column:
+              name: user_id
+              type: bigint
+              constraints:
+                nullable: false
+          - column:
+              name: authority_id
+              type: bigint
+              constraints:
+                nullable: false
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: users_authorities
+            constraintName: fk_users_authorities
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: authority_id
+            baseTableName: users_authorities
+            constraintName: fk_authorities_users
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: authorities
+            validate: true
+        - addUniqueConstraint:
+            columnNames: user_id, authority_id
+            constraintName: uk_users_authoritites
+            tableName: users_authorities
+            validate: true

@@ -10,4 +10,5 @@
 9. 9th Homework localized in library directory in branch homework9
 10. 10th Homework localized in library directory in branch homework10
 11. 11th Homework localized in library directory in branch homework11
-12. 12th Homework localized in library directory in branch library-thymeleaf
+12. 12th Homework localized in library-thymeleaf directory in branch homework12
+
