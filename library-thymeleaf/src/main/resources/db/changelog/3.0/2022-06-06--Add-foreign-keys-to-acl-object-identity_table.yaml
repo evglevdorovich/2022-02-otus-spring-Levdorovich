@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-06-06--Add-foreign-keys-to-acl-object-identity_table
+      author: levjack1995
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: object_id_class
+            baseTableName: acl_object_identity
+            constraintName: fk_acl_object_identity__acl_class
+            referencedColumnNames: id
+            referencedTableName: acl_class
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: owner_sid
+            baseTableName: acl_object_identity
+            constraintName: fk_acl_object_identity__acl_sid
+            referencedColumnNames: id
+            referencedTableName: acl_sid
+            validate: true

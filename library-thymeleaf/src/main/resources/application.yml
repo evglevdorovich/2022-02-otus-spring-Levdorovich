@@ -15,3 +15,9 @@ spring:
         format_sql: false
 
     show-sql: false
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

@@ -13,7 +13,7 @@ import java.util.Objects;
 @ToString
 @Entity
 @Table(name = "comments")
-public class Comment {
+public class Comment implements ApplicationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

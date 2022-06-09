@@ -14,7 +14,7 @@ import java.util.Objects;
 @ToString
 @Entity
 @Table(name = "books")
-public class Book {
+public class Book implements ApplicationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

@@ -13,6 +13,18 @@ databaseChangeLog:
       file: db/changelog/3.0/2022-06-01--Create-authorities_table.yaml
   - include:
       file: db/changelog/3.0/2022-06-01--Create-users-authorities_table.yaml
+  - include:
+      file: db/changelog/3.0/2022-06-06--Create-acl-sid_table.yaml
+  - include:
+      file: db/changelog/3.0/2022-06-06--Create-acl-class_table.yaml
+  - include:
+      file: db/changelog/3.0/2022-06-06--Create-acl-entry_table.yaml
+  - include:
+      file: db/changelog/3.0/2022-06-06--Create-acl-object-identity_table.yaml
+  - include:
+      file: db/changelog/3.0/2022-06-06--Add-foreign-keys-to-acl-entry_table.yaml
+  - include:
+      file: db/changelog/3.0/2022-06-06--Add-foreign-keys-to-acl-object-identity_table.yaml
 
   - include:
       file: db/changelog/data/2022-03-28--Add-authors-test.yaml
@@ -28,3 +40,11 @@ databaseChangeLog:
       file: db/changelog/data/2022-06-01--Add-authorities-test.yaml
   - include:
       file: db/changelog/data/2022-06-01--Add-users-authorities-test.yaml
+  - include:
+      file: db/changelog/data/2022-06-01--Add-acl-class-test.yaml
+  - include:
+      file: db/changelog/data/2022-06-01--Add-acl-sid-test.yaml
+  - include:
+      file: db/changelog/data/2022-06-01--Add-acl-object-identity-test.yaml
+  - include:
+      file: db/changelog/data/2022-06-01--Add-acl-entry-test.yaml

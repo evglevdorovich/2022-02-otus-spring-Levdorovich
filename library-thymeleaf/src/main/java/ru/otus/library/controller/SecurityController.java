@@ -14,4 +14,8 @@ public class SecurityController {
     }
 
 
+    @GetMapping("/403")
+    public String accessDeniedPage() {
+        return "/403";
+    }
 }
