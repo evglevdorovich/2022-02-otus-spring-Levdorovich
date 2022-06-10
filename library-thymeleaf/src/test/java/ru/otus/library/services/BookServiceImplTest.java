@@ -72,6 +72,7 @@ class BookServiceImplTest {
         var id = 1L;
         bookService.deleteById(id);
         verify(bookRepository).deleteExistingBookById(id);
+        verify(permissionService, times(1)).removePermissionForAuthority(Book.class, id);
     }
 
     @WithMockUser(username = "user")

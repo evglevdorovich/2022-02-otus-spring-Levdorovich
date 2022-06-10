@@ -35,4 +35,10 @@ public class PermissionServiceImpl implements PermissionService {
         aclService.updateAcl(acl);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void removePermissionForAuthority(Class<?> targetClass, long objectId) {
+        val oi = new ObjectIdentityImpl(targetClass, objectId);
+        aclService.deleteAcl(oi,true);
+    }
+
 }

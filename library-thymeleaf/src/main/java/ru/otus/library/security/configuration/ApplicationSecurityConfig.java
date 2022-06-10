@@ -19,8 +19,8 @@ public class ApplicationSecurityConfig {
         http.csrf().disable().headers().disable()
                 .authorizeRequests(authz -> authz
                         .antMatchers("/h2-console/**", "/403").permitAll()
-                        .antMatchers("/**")
-                        .authenticated()
+                        .antMatchers("/", "/comments/*").hasAnyRole("USER", "ADMIN")
+                        .antMatchers("books/**").hasRole("ADMIN")
                 )
                 .formLogin()
                 .defaultSuccessUrl("/")

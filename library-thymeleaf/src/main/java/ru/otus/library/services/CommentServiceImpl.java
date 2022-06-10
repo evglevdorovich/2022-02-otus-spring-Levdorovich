@@ -19,7 +19,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public Comment getById(long id) {
         return commentRepository.findById(id).orElseThrow(EmptyResultException::new);
     }
@@ -33,7 +32,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public List<Comment> getByBookId(long bookId) {
         return commentRepository.findAllByBookId(bookId);
     }

@@ -1,7 +1,6 @@
 package ru.otus.library.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.domain.Author;
@@ -17,14 +16,12 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public List<Author> getAll() {
         return authorRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
     @Override
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
+    @Transactional(readOnly = true)
     public List<Author> getAllExceptBooksAuthor(Book book) {
         var authors = authorRepository.findAll();
         authors.remove(book.getAuthor());

@@ -17,14 +17,12 @@ public class GenreServiceImpl implements GenreService {
 
     @Transactional(readOnly = true)
     @Override
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public List<Genre> getAll() {
         return genreRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     @Override
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public List<Genre> getAllExceptBooksGenre(Book book) {
         var genres = genreRepository.findAll();
         genres.remove(book.getGenre());

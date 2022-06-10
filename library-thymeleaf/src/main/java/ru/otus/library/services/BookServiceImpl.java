@@ -61,6 +61,7 @@ public class BookServiceImpl implements BookService {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteById(long id) {
         bookRepository.deleteExistingBookById(id);
+        permissionService.removePermissionForAuthority(Book.class, id);
     }
 
     @Transactional(readOnly = true)
@@ -77,8 +78,7 @@ public class BookServiceImpl implements BookService {
             if (hasRoleUser(authority) || hasRoleAdmin(authority)) {
                 permissionService.addPermissionForAuthority(book, BasePermission.READ, "ROLE_USER");
                 permissionService.addPermissionForAuthority(book, BasePermission.READ, "ROLE_ADMIN");
-            }
-            else if (hasRoleAdmin(authority)) {
+            } else if (hasRoleAdmin(authority)) {
                 permissionService.addPermissionForAuthority(book, BasePermission.WRITE, "ROLE_ADMIN");
             }
         }
