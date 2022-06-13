@@ -11,6 +11,7 @@ import ru.otus.library.domain.Book;
 import ru.otus.library.dto.BookForUpdateDto;
 import ru.otus.library.repository.AuthorRepository;
 import ru.otus.library.repository.BookRepository;
+import ru.otus.library.repository.CommentRepository;
 import ru.otus.library.repository.GenreRepository;
 
 import javax.annotation.Nonnull;
@@ -24,6 +25,7 @@ public class BookHandler {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
+    private final CommentRepository commentRepository;
 
     @Nonnull
     public Mono<ServerResponse> getBookById(ServerRequest serverRequest) {
@@ -49,7 +51,7 @@ public class BookHandler {
     @Nonnull
     public Mono<ServerResponse> deleteById(ServerRequest serverRequest) {
         var id = serverRequest.pathVariable("id");
-        return bookRepository.deleteById(id)
+        return Mono.zip(bookRepository.deleteById(id), commentRepository.deleteByBookId(id))
                 .flatMap(val -> ServerResponse.ok().build());
     }
 
@@ -79,7 +81,7 @@ public class BookHandler {
                     var authorMono = authorRepository.findById(dtoBook.getAuthorId());
                     return genreMono
                             .zipWith(authorMono, (genre, author) -> new Book(bookId, dtoBook.getName(), author, genre))
-                            .flatMap(bookRepository::update);
+                            .flatMap(bookRepository::insert);
                 })
                 .flatMap(book -> ServerResponse.ok().build())
                 .switchIfEmpty(ServerResponse.notFound().build());

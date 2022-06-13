@@ -10,6 +10,7 @@ import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
+import ru.otus.library.domain.ShortBook;
 import ru.otus.library.repository.CommentRepository;
 
 @ChangeLog(order = "001")
@@ -68,18 +69,18 @@ public class InitMongoDBDataChangeLog {
     @ChangeSet(order = "004", id = "initComments", author = "jack", runAlways = true)
     public void initComments(CommentRepository repository) {
 
-        repository.saveComment(new Comment(
-                new Book(firstBook.getId(), firstBook.getName(), null, null), "bad")).subscribe();
-        repository.saveComment(new Comment(
-                new Book(firstBook.getId(), firstBook.getName(), null, null), "good")).subscribe();
-        repository.saveComment(new Comment(
-                new Book(secondBook.getId(), secondBook.getName(), null, null), "very bad")).subscribe();
-        repository.saveComment(new Comment(
-                new Book(thirdBook.getId(), thirdBook.getName(), null, null), "very good")).subscribe();
-        repository.saveComment(new Comment(
-                new Book(fourthBook.getId(), fourthBook.getName(), null, null), "excellent")).subscribe();
-        repository.saveComment(new Comment(
-                new Book(fifthBook.getId(), fifthBook.getName(), null, null), "amazing")).subscribe();
+        repository.insert(new Comment(
+               new ShortBook(firstBook.getId()), "bad")).subscribe();
+        repository.insert(new Comment(
+                new ShortBook(firstBook.getId()), "good")).subscribe();
+        repository.insert(new Comment(
+                new ShortBook(secondBook.getId()), "very bad")).subscribe();
+        repository.insert(new Comment(
+                new ShortBook(thirdBook.getId()), "very good")).subscribe();
+        repository.insert(new Comment(
+                new ShortBook(fourthBook.getId()), "excellent")).subscribe();
+        repository.insert(new Comment(
+                new ShortBook(fifthBook.getId()), "amazing")).subscribe();
     }
 
     @ChangeSet(order = "005", id = "addIndexes", author = "jack", runAlways = true)

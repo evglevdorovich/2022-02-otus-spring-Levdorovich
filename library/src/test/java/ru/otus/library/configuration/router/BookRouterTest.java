@@ -158,7 +158,7 @@ class BookRouterTest {
 
         when(genreRepository.findById(bookDto.getGenreId())).thenReturn(Mono.just(genre));
         when(authorRepository.findById(bookDto.getGenreId())).thenReturn(Mono.just(author));
-        when(bookRepository.update(bookCaptor.capture())).thenReturn(Mono.just(book));
+        when(bookRepository.insert(bookCaptor.capture())).thenReturn(Mono.just(book));
 
         client.put()
                 .uri(uriPattern)
@@ -200,7 +200,7 @@ class BookRouterTest {
 
         when(genreRepository.findById(bookDto.getGenreId())).thenReturn(Mono.just(genre));
         when(authorRepository.findById(bookDto.getGenreId())).thenReturn(Mono.just(author));
-        when(bookRepository.update(bookCaptor.capture())).thenReturn(Mono.empty());
+        when(bookRepository.insert(bookCaptor.capture())).thenReturn(Mono.empty());
 
         client.put()
                 .uri(uriPattern)
