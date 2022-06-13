@@ -35,7 +35,6 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void update(long id, String name, long genreId, long authorId) {
         var author = authorRepository.findById(authorId).orElseThrow(InvalidDataForUpdateException::new);
         var genre = genreRepository.findById(genreId).orElseThrow(InvalidDataForUpdateException::new);
@@ -48,7 +47,6 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void insert(String name, long genreId, long authorId) {
         var genre = genreRepository.findById(genreId).orElseThrow(InvalidDataForUpdateException::new);
         var author = authorRepository.findById(authorId).orElseThrow(InvalidDataForUpdateException::new);
@@ -58,7 +56,6 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteById(long id) {
         bookRepository.deleteExistingBookById(id);
         permissionService.removePermissionForAuthority(Book.class, id);
