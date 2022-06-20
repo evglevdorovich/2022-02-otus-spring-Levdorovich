@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-06-01--Create-acl-object-identity_table
+      author: levjack1995
+      createTable:
+        tableName: acl_object_identity
+        columns:
+          - column:
+              name: id
+              type: bigint(20)
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_acl_objec_identity
+          - column:
+              name: object_id_class
+              type: bigint(20)
+              constraints:
+                nullable: false
+          - column:
+              name: object_id_identity
+              type: bigint(20)
+              constraints:
+                nullable: false
+          - column:
+              name: parent_object
+              type: bigint(20)
+              constraints:
+                default: null
+          - column:
+              name: owner_sid
+              type: bigint(20)
+              constraints:
+                default: null
+          - column:
+              name: entries_inheriting
+              type: tinyint(1)
+              constraints:
+                nullable: false
+      changes:
+        - addUniqueConstraint:
+            columnNames: object_id_class, object_id_identity
+            constraintName: uk_acl_object_id_class__object_id_identity
+            tableName: acl_object_identity
+            validate: true

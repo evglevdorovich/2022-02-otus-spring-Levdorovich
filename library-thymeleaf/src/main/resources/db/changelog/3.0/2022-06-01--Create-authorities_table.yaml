@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-06-01--Create-authorities_table
+      author: levjack1995
+      createTable:
+        tableName: authorities
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_authority
+          - column:
+              name: name
+              type: varchar(100)
+              constraints:
+                nullable: false

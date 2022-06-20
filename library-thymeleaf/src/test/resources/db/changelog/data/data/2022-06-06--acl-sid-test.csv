@@ -1,0 +1,5 @@
+id;principal;sid
+1;1;admin
+2;1;user
+3;0;ROLE_USER
+4;0;ROLE_ADMIN
