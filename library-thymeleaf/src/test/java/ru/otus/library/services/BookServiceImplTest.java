@@ -7,6 +7,8 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.acls.domain.BasePermission;
+import org.springframework.security.test.context.support.WithMockUser;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Genre;
@@ -20,8 +22,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = BookServiceImpl.class)
 @DisplayName("Book service impl should:  ")
@@ -34,6 +35,8 @@ class BookServiceImplTest {
     private GenreRepository genreRepository;
     @MockBean
     private AuthorRepository authorRepository;
+    @MockBean
+    private PermissionService permissionService;
     @Captor
     private ArgumentCaptor<Book> bookCaptor;
 
@@ -69,8 +72,10 @@ class BookServiceImplTest {
         var id = 1L;
         bookService.deleteById(id);
         verify(bookRepository).deleteExistingBookById(id);
+        verify(permissionService, times(1)).removePermissionForAuthority(Book.class, id);
     }
 
+    @WithMockUser(username = "user")
     @DisplayName("call dao saveOrUpdate book in insert method")
     @Test
     void shouldCallRepositorySaveBookInInsert() {
@@ -79,15 +84,21 @@ class BookServiceImplTest {
         var author = new Author(id, "name");
         var genre = new Genre(id, "name");
         var book = new Book(bookName, author, genre);
+        var bookWithId = new Book(id, bookName, author, genre);
 
         when(genreRepository.findById(id)).thenReturn(Optional.of(genre));
         when(authorRepository.findById(id)).thenReturn(Optional.of(author));
+        when(bookRepository.save(bookCaptor.capture())).thenReturn(bookWithId);
 
         bookService.insert(book.getName(), book.getGenre().getId(), book.getAuthor().getId());
 
         verify(bookRepository).save(bookCaptor.capture());
 
+        verify(permissionService, times(1)).addPermissionForAuthority(bookWithId, BasePermission.READ, "ROLE_USER");
+        verify(permissionService, times(1)).addPermissionForAuthority(bookWithId, BasePermission.READ, "ROLE_ADMIN");
+
         assertThat(bookCaptor.getValue()).usingRecursiveComparison().isEqualTo(book);
+
     }
 
     @DisplayName("throw InvalidDataForUpdateException while add unexisting genre in insert method")

@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-06-01--Create-acl-class_table
+      author: levjack1995
+      createTable:
+        tableName: acl_class
+        columns:
+          - column:
+              name: id
+              type: bigint(20)
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_acl_class
+          - column:
+              name: class
+              type: varchar(255)
+              constraints:
+                nullable: false
+      changes:
+        - addUniqueConstraint:
+            columnNames: class
+            constraintName: uk_class
+            tableName: acl_class
+            validate: true

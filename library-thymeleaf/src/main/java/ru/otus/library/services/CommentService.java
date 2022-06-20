@@ -9,9 +9,5 @@ public interface CommentService {
 
     void deleteById(long id);
 
-    void save(long bookId, String text);
-
-    void update(long commentId, String updatedText);
-
     List<Comment> getByBookId(long bookId);
 }

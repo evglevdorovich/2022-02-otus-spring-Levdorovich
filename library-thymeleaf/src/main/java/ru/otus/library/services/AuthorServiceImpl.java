@@ -14,14 +14,14 @@ import java.util.List;
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public List<Author> getAll() {
         return authorRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public List<Author> getAllExceptBooksAuthor(Book book) {
         var authors = authorRepository.findAll();
         authors.remove(book.getAuthor());

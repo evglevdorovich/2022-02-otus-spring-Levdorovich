@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-06-01--Create-acl-entry_table
+      author: levjack1995
+      createTable:
+        tableName: acl_entry
+        columns:
+          - column:
+              name: id
+              type: bigint(20)
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_acl_entry
+          - column:
+              name: acl_object_identity
+              type: bigint(20)
+              constraints:
+                nullable: false
+          - column:
+              name: ace_order
+              type: int(11)
+              constraints:
+                nullable: false
+          - column:
+              name: sid
+              type: bigint(20)
+              constraints:
+                nullable: false
+          - column:
+              name: mask
+              type: int(11)
+              constraints:
+                nullable: false
+          - column:
+              name: granting
+              type: tinyint(1)
+              constraints:
+                nullable: false
+          - column:
+              name: audit_success
+              type: tinyint(1)
+              constraints:
+                nullable: false
+          - column:
+              name: audit_failure
+              type: tinyint(1)
+              constraints:
+                nullable: false
+      changes:
+        - addUniqueConstraint:
+            columnNames: acl_object_identity, ace_order
+            constraintName: uk_acl_object_identity__ace_order
+            tableName: acl_entry
+            validate: true
