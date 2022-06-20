@@ -1,5 +1,5 @@
 package ru.otus.library.domain;
 
-public interface ApplicationEntity {
+public class ApplicationEntity {
     long getId();
 }
