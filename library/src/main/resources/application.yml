@@ -1,19 +1,12 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-  h2:
-    console:
-      path: /h2-console
-      settings:
-        web-allow-others: true
-      enabled: false
-  jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: validate
-
-    properties:
-      hibernate:
-        format_sql: true
-
-    show-sql: false
+  data:
+    mongodb:
+      port: 27017
+      database: library
+mongock:
+  change-logs-scan-package:
+    - ru.otus.library.mongock.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
