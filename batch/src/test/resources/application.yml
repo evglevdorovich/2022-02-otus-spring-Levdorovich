@@ -33,7 +33,7 @@ spring:
       enabled: true
   data:
     mongodb:
-      port: 27017
+      port: 0
       database: library
   mongodb:
     embedded:
