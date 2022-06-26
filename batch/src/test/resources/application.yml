@@ -1,0 +1,40 @@
+application:
+  job:
+    chunk-size: 10
+    page-size: 10
+spring:
+  shell:
+    interactive:
+      enabled: false
+  liquibase:
+    change-log: db/changelog/db.changelog-test.yaml
+  main:
+    allow-circular-references: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+  h2:
+    console:
+      path: /h2-console
+      settings:
+        web-allow-others: true
+      enabled: true
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: validate
+
+    properties:
+      hibernate:
+        format_sql: false
+
+    show-sql: false
+  batch:
+    job:
+      enabled: true
+  data:
+    mongodb:
+      port: 27017
+      database: library
+  mongodb:
+    embedded:
+      version: 3.4.0

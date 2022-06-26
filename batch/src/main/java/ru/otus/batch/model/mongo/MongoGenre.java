@@ -1,4 +1,4 @@
-package ru.otus.library.domain;
+package ru.otus.batch.model.mongo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,15 +12,11 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @Data
 @Document("genres")
-public class Genre {
+public class MongoGenre {
     @Id
     private String id;
 
     @Field(name = "name")
     @Indexed(unique = true)
     private String name;
-
-    public Genre(String name) {
-        this.name = name;
-    }
 }

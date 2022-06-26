@@ -1,31 +1,5 @@
 package ru.otus.library.configuration.router;
 
-import com.google.gson.Gson;
-import lombok.val;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
-import ru.otus.library.domain.Author;
-import ru.otus.library.domain.Book;
-import ru.otus.library.domain.Comment;
-import ru.otus.library.domain.Genre;
-import ru.otus.library.dto.CommentDto;
-import ru.otus.library.handler.CommentHandler;
-import ru.otus.library.repository.CommentRepository;
-
-import java.util.List;
-
-import static org.mockito.Mockito.when;
-
 //@WebFluxTest({CommentRouter.class, CommentHandler.class})
 //@DisplayName("Comment Router should")
 //class CommentRouterTest {
