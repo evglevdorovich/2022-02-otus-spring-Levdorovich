@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @Data
 @Document("genres")
-public class MongoGenre {
+public class Genre {
     @Id
     private String id;
 
@@ -20,7 +20,7 @@ public class MongoGenre {
     @Indexed(unique = true)
     private String name;
 
-    public MongoGenre(String name) {
+    public Genre(String name) {
         this.name = name;
     }
 }

@@ -1,9 +1,9 @@
 package ru.otus.library.repository;
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-import ru.otus.library.domain.MongoBook;
+import ru.otus.library.domain.Book;
 
 
-public interface BookRepository extends ReactiveMongoRepository<MongoBook, String> {
+public interface BookRepository extends ReactiveMongoRepository<Book, String> {
     
 }

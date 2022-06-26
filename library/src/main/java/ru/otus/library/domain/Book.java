@@ -1,26 +1,32 @@
 package ru.otus.library.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
-@Document("authors")
-public class MongoAuthor {
+@Document("books")
+public class Book {
     @Id
     private String id;
 
     @Field(name = "name")
-    @Indexed(unique = true)
     private String name;
 
-    public MongoAuthor(String name) {
+    @ToString.Exclude
+    private Author author;
+
+    @ToString.Exclude
+    private Genre genre;
+
+    public Book(String name, Author author, Genre genre) {
         this.name = name;
+        this.author = author;
+        this.genre = genre;
     }
 }
+

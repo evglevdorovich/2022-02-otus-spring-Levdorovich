@@ -17,9 +17,9 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.otus.library.domain.MongoAuthor;
-import ru.otus.library.domain.MongoBook;
-import ru.otus.library.domain.MongoGenre;
+import ru.otus.library.domain.Author;
+import ru.otus.library.domain.Book;
+import ru.otus.library.domain.Genre;
 import ru.otus.library.dto.BookForUpdateDto;
 import ru.otus.library.handler.BookHandler;
 import ru.otus.library.repository.AuthorRepository;
@@ -45,7 +45,7 @@ class BookRouterTest {
     @Autowired
     private Gson gson;
     @Captor
-    private ArgumentCaptor<MongoBook> bookCaptor;
+    private ArgumentCaptor<Book> bookCaptor;
 
     private WebTestClient client;
 
@@ -58,9 +58,9 @@ class BookRouterTest {
     @DisplayName("should return correct getBooks response")
     void getBooksShouldReturnCorrectBooksResponse() {
         val uriPattern = "/api/books";
-        val genre = new MongoGenre("genreName");
-        val author = new MongoAuthor("authorName");
-        val books = List.of(new MongoBook("1", "name", author, genre));
+        val genre = new Genre("genreName");
+        val author = new Author("authorName");
+        val books = List.of(new Book("1", "name", author, genre));
         val bookFlux = Flux.just(books.get(0));
         val jsonBooks = gson.toJson(books);
 
@@ -79,9 +79,9 @@ class BookRouterTest {
     void getBookShouldReturnCorrectBooksResponse() {
         val bookId = "bookId";
         val uriPattern = "/api/books/" + bookId;
-        val genre = new MongoGenre("genreName");
-        val author = new MongoAuthor("authorName");
-        val book = new MongoBook(bookId, "name", author, genre);
+        val genre = new Genre("genreName");
+        val author = new Author("authorName");
+        val book = new Book(bookId, "name", author, genre);
         val bookMono = Mono.just(book);
         val jsonBook = gson.toJson(book);
 
@@ -115,10 +115,10 @@ class BookRouterTest {
         val bookId = "bookId";
         val uriPattern = "/api/books/";
         val bookName = "bookName";
-        val genre = new MongoGenre("genreName");
-        val author = new MongoAuthor("authorName");
-        val book = new MongoBook(bookId, bookName, author, genre);
-        val bookWithNullId = new MongoBook(bookName, author, genre);
+        val genre = new Genre("genreName");
+        val author = new Author("authorName");
+        val book = new Book(bookId, bookName, author, genre);
+        val bookWithNullId = new Book(bookName, author, genre);
         val bookDto = new BookForUpdateDto();
 
         bookDto.setName(bookName);
@@ -147,9 +147,9 @@ class BookRouterTest {
         val bookId = "bookId";
         val uriPattern = "/api/books/" + bookId;
         val bookName = "bookName";
-        val genre = new MongoGenre("genreName");
-        val author = new MongoAuthor("authorName");
-        val book = new MongoBook(bookId, bookName, author, genre);
+        val genre = new Genre("genreName");
+        val author = new Author("authorName");
+        val book = new Book(bookId, bookName, author, genre);
         val bookDto = new BookForUpdateDto();
 
         bookDto.setName(bookName);
@@ -189,9 +189,9 @@ class BookRouterTest {
         val bookId = "bookId";
         val uriPattern = "/api/books/" + bookId;
         val bookName = "bookName";
-        val genre = new MongoGenre("genreName");
-        val author = new MongoAuthor("authorName");
-        val book = new MongoBook(bookId, bookName, author, genre);
+        val genre = new Genre("genreName");
+        val author = new Author("authorName");
+        val book = new Book(bookId, bookName, author, genre);
         val bookDto = new BookForUpdateDto();
 
         bookDto.setName(bookName);

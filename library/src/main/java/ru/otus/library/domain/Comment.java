@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class MongoComment {
+public class Comment {
     @Id
     private String id;
 
@@ -19,7 +19,7 @@ public class MongoComment {
     @Field(name = "book")
     private ShortBook book;
 
-    public MongoComment(ShortBook book, String text) {
+    public Comment(ShortBook book, String text) {
         this.book = book;
         this.text = text;
     }

@@ -13,7 +13,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
-import ru.otus.library.domain.MongoAuthor;
+import ru.otus.library.domain.Author;
 import ru.otus.library.handler.AuthorHandler;
 import ru.otus.library.repository.AuthorRepository;
 
@@ -42,7 +42,7 @@ class AuthorRouterTest {
     @DisplayName("should return correct author's response")
     void shouldReturnCorrectAuthorsResponse() {
         val uriPattern = "/api/authors";
-        val authors = List.of(new MongoAuthor("1", "name"));
+        val authors = List.of(new Author("1", "name"));
         val authorFlux = Flux.just(authors.get(0));
         val jsonAuthor = gson.toJson(authors);
         when(authorRepository.findAll()).thenReturn(authorFlux);

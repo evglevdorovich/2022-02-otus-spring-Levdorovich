@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-import ru.otus.library.domain.MongoBook;
+import ru.otus.library.domain.Book;
 import ru.otus.library.dto.BookForUpdateDto;
 import ru.otus.library.repository.AuthorRepository;
 import ru.otus.library.repository.BookRepository;
@@ -63,7 +63,7 @@ public class BookHandler {
                     var genreMono = genreRepository.findById(dtoBook.getGenreId());
                     var authorMono = authorRepository.findById(dtoBook.getAuthorId());
                     return genreMono
-                            .zipWith(authorMono, (genre, author) -> new MongoBook(dtoBook.getName(), author, genre))
+                            .zipWith(authorMono, (genre, author) -> new Book(dtoBook.getName(), author, genre))
                             .flatMap(bookRepository::save);
                 })
                 .flatMap(book -> ServerResponse.created(URI.create("/api/books/" + book.getId()))
@@ -80,7 +80,7 @@ public class BookHandler {
                     var genreMono = genreRepository.findById(dtoBook.getGenreId());
                     var authorMono = authorRepository.findById(dtoBook.getAuthorId());
                     return genreMono
-                            .zipWith(authorMono, (genre, author) -> new MongoBook(bookId, dtoBook.getName(), author, genre))
+                            .zipWith(authorMono, (genre, author) -> new Book(bookId, dtoBook.getName(), author, genre))
                             .flatMap(bookRepository::insert);
                 })
                 .flatMap(book -> ServerResponse.ok().build())

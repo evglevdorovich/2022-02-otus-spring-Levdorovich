@@ -3,7 +3,7 @@ package ru.otus.library.configuration;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.otus.library.domain.MongoBook;
+import ru.otus.library.domain.Book;
 import ru.otus.library.dto.BookForViewDto;
 
 @Configuration
@@ -16,7 +16,7 @@ public class MapperConfiguration {
     }
 
     private void addBookForViewPropertyMapper(ModelMapper mapper) {
-        var propertyMapper = mapper.createTypeMap(MongoBook.class, BookForViewDto.class);
+        var propertyMapper = mapper.createTypeMap(Book.class, BookForViewDto.class);
         propertyMapper.addMappings(
                 m -> m.map(book -> book.getGenre().getName(), BookForViewDto::setGenreName)
         );
