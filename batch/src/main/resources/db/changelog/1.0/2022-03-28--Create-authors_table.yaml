@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-03-28--Create-authors_table
+      author: levjack1995
+      createTable:
+        tableName: authors
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_author
+          - column:
+              name: name
+              type: varchar(255)
+              constraints:
+                nullable: false

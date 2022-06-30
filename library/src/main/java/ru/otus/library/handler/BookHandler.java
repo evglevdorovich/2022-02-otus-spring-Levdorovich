@@ -16,6 +16,7 @@ import ru.otus.library.repository.GenreRepository;
 
 import javax.annotation.Nonnull;
 import java.net.URI;
+import java.util.Optional;
 
 import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 
@@ -51,7 +52,8 @@ public class BookHandler {
     @Nonnull
     public Mono<ServerResponse> deleteById(ServerRequest serverRequest) {
         var id = serverRequest.pathVariable("id");
-        return Mono.zip(bookRepository.deleteById(id), commentRepository.deleteByBookId(id))
+        return Mono.zip(commentRepository.deleteByBookId(id),
+                        bookRepository.deleteById(id))
                 .flatMap(val -> ServerResponse.ok().build());
     }
 

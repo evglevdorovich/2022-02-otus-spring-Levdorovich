@@ -24,6 +24,7 @@ import ru.otus.library.dto.BookForUpdateDto;
 import ru.otus.library.handler.BookHandler;
 import ru.otus.library.repository.AuthorRepository;
 import ru.otus.library.repository.BookRepository;
+import ru.otus.library.repository.CommentRepository;
 import ru.otus.library.repository.GenreRepository;
 
 import java.util.List;
@@ -42,6 +43,8 @@ class BookRouterTest {
     private AuthorRepository authorRepository;
     @MockBean
     private GenreRepository genreRepository;
+    @MockBean
+    private CommentRepository commentRepository;
     @Autowired
     private Gson gson;
     @Captor
@@ -101,6 +104,7 @@ class BookRouterTest {
         val bookId = "bookId";
         val uriPattern = "/api/books/" + bookId;
         when(bookRepository.deleteById(bookId)).thenReturn(Mono.empty());
+        when(commentRepository.deleteByBookId(bookId)).thenReturn(Mono.empty());
 
         client.delete()
                 .uri(uriPattern)
