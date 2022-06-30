@@ -31,10 +31,6 @@ spring:
   batch:
     job:
       enabled: true
-  data:
-    mongodb:
-      port: 0
-      database: library
   mongodb:
     embedded:
       version: 3.4.0

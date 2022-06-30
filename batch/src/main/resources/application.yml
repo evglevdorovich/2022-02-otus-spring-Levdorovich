@@ -31,9 +31,9 @@ spring:
       enabled: true
   data:
     mongodb:
-      port: 0
+      port: 27017
       database: library
-  mongodb:
-    embedded:
-      version: 3.4.0
+#  mongodb:
+#    embedded:
+#      version: 3.4.0
 

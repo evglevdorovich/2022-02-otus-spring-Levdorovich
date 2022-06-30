@@ -15,6 +15,7 @@ import org.springframework.batch.item.data.MongoItemWriter;
 import org.springframework.batch.item.data.builder.MongoItemWriterBuilder;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,14 +34,16 @@ import javax.persistence.EntityManagerFactory;
 @RequiredArgsConstructor
 @EnableBatchProcessing
 @Configuration
-@ConfigurationProperties(prefix = "application.job")
 public class JobConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     @Setter
+    @Value("${application.job.page-size}")
     private int pageSize;
     @Setter
+    @Value("${application.job.chunk-size}")
     private int chunkSize;
+
 
     @Bean
     public JpaPagingItemReader<Book> bookReader(EntityManagerFactory entityManagerFactory) {

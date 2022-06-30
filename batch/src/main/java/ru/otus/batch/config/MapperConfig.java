@@ -10,5 +10,15 @@ public class MapperConfig {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
+//    private void addBookForViewPropertyMapper(ModelMapper mapper) {
+//        var propertyMapper = mapper.createTypeMap(Book.class, BookForViewDto.class);
+//        propertyMapper.addMappings(
+//                m -> m.map(book -> book.getGenre().getName(), BookForViewDto::setGenreName)
+//        );
+//        propertyMapper.addMappings(
+//                m -> m.map(book -> book.getAuthor().getName(), BookForViewDto::setAuthorName)
+//        );
+//    }
 }
 
