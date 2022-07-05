@@ -10,10 +10,11 @@ import java.util.List;
 
 @Service
 public class CaterpillarGenerator {
-    public static final String[] CATERPILLAR_NAMES = {"Olivia", "Emma", "Charlotte", "Amelia", "Ava",
-            "Sophia", "Isabella", "Mia"};
+
     private static final int MAX_AGE = 17;
     public List<Butterfly> generateCaterpillars() {
+        final String[] CATERPILLAR_NAMES = {"Olivia", "Emma", "Charlotte", "Amelia", "Ava",
+                "Sophia", "Isabella", "Mia"};
         var caterpillars = new ArrayList<Butterfly>();
         for (int i = 0; i < 10; i++) {
             var age = RandomUtils.nextInt(0, MAX_AGE);
