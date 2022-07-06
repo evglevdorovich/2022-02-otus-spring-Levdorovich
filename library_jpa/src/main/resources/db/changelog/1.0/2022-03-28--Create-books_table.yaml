@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-03-28--Create-books_table
+      author: levjack1995
+      createTable:
+        tableName: books
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_book
+          - column:
+              name: name
+              type: varchar(255)
+              constraints:
+                nullable: false
+          - column:
+              name: author_id
+              type: bigint
+              constraints:
+                nullable: false
+          - column:
+              name: genre_id
+              type: bigint
+              constraints:
+                nullable: false
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: author_id
+            baseTableName: books
+            constraintName: fk_books_authors
+            onDelete: RESTRICT
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: authors
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: genre_id
+            baseTableName: books
+            constraintName: fk_books_genres
+            onDelete: RESTRICT
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: genres
+            validate: true
