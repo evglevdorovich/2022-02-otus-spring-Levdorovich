@@ -1,0 +1,40 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics,health,logfile"
+  endpoint:
+    health:
+      show-details: always
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+  h2:
+    console:
+      path: /h2-console
+      settings:
+        web-allow-others: true
+      enabled: true
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: validate
+  data:
+    rest:
+      base-path: /api
+
+    properties:
+      hibernate:
+        format_sql: true
+
+    show-sql: false
+
+logging:
+  file:
+    name: logs/application-debug-rest.log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    root: info
