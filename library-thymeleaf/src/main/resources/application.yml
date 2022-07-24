@@ -1,10 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-  h2:
-    console:
-      path: /h2-console
-      enabled: true
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.postgresql.Driver}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
   jpa:
     generate-ddl: true
     hibernate:
@@ -13,11 +12,11 @@ spring:
     properties:
       hibernate:
         format_sql: false
-
     show-sql: false
 
 logging:
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
   level:
-    org:
-      springframework:
-        security: DEBUG
+    root: info

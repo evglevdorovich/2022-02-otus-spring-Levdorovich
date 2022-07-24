@@ -7,35 +7,36 @@ databaseChangeLog:
         columns:
           - column:
               name: id
-              type: bigint(20)
+              type: bigserial
               autoIncrement: true
+              startWith: 6
               constraints:
                 nullable: false
                 primaryKey: true
                 primaryKeyName: pk_acl_objec_identity
           - column:
               name: object_id_class
-              type: bigint(20)
+              type: bigint
               constraints:
                 nullable: false
           - column:
               name: object_id_identity
-              type: bigint(20)
+              type: varchar(36)
               constraints:
                 nullable: false
           - column:
               name: parent_object
-              type: bigint(20)
+              type: bigint
               constraints:
                 default: null
           - column:
               name: owner_sid
-              type: bigint(20)
+              type: bigint
               constraints:
                 default: null
           - column:
               name: entries_inheriting
-              type: tinyint(1)
+              type: boolean
               constraints:
                 nullable: false
       changes:

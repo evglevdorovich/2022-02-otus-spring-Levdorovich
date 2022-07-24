@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>Comments</title>
-    <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}">
+    <link href="../static/style.css" rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 <div class="flex flex--comment-table">
@@ -26,7 +26,7 @@
         </tbody>
     </table>
     <a href="library.html" th:href="@{/}">
-        <img class="return-icon" src="../static/return-icon.svg" th:src="@{/return-icon.svg}" alt="return-icon">
+        <img alt="return-icon" class="return-icon" src="../static/return-icon.svg" th:src="@{/return-icon.svg}">
     </a>
 </div>
 </body>
