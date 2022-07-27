@@ -7,45 +7,46 @@ databaseChangeLog:
         columns:
           - column:
               name: id
-              type: bigint(20)
+              type: bigint
               autoIncrement: true
+              startWith: 16
               constraints:
                 nullable: false
                 primaryKey: true
                 primaryKeyName: pk_acl_entry
           - column:
               name: acl_object_identity
-              type: bigint(20)
+              type: bigint
               constraints:
                 nullable: false
           - column:
               name: ace_order
-              type: int(11)
+              type: int
               constraints:
                 nullable: false
           - column:
               name: sid
-              type: bigint(20)
+              type: bigint
               constraints:
                 nullable: false
           - column:
               name: mask
-              type: int(11)
+              type: int
               constraints:
                 nullable: false
           - column:
               name: granting
-              type: tinyint(1)
+              type: boolean
               constraints:
                 nullable: false
           - column:
               name: audit_success
-              type: tinyint(1)
+              type: boolean
               constraints:
                 nullable: false
           - column:
               name: audit_failure
-              type: tinyint(1)
+              type: boolean
               constraints:
                 nullable: false
       changes:

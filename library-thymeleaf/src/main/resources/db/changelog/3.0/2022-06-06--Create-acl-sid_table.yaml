@@ -7,15 +7,16 @@ databaseChangeLog:
         columns:
           - column:
               name: id
-              type: bigint(20)
+              type: bigserial
               autoIncrement: true
+              startWith: 5
               constraints:
                 nullable: false
                 primaryKey: true
                 primaryKeyName: pk_acl_sid
           - column:
               name: principal
-              type: tinyint(1)
+              type: boolean
               constraints:
                 nullable: false
           - column:
@@ -28,4 +29,3 @@ databaseChangeLog:
             columnNames: sid, principal
             constraintName: uk_sid_principals
             tableName: acl_sid
-            validate: true

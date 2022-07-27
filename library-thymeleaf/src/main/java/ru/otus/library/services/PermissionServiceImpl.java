@@ -31,14 +31,14 @@ public class PermissionServiceImpl implements PermissionService {
             acl = aclService.createAcl(oi);
         }
 
-        acl.insertAce(acl.getEntries().size(),permission,sid,true);
+        acl.insertAce(acl.getEntries().size(), permission, sid, true);
         aclService.updateAcl(acl);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void removePermissionForAuthority(Class<?> targetClass, long objectId) {
         val oi = new ObjectIdentityImpl(targetClass, objectId);
-        aclService.deleteAcl(oi,true);
+        aclService.deleteAcl(oi, true);
     }
 
 }

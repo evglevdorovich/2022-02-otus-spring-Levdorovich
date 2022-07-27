@@ -1,37 +1,35 @@
 package ru.otus.library.controller;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.library.domain.*;
+import ru.otus.library.domain.Author;
+import ru.otus.library.domain.Book;
+import ru.otus.library.domain.Comment;
+import ru.otus.library.domain.Genre;
 import ru.otus.library.dto.BookForViewDto;
 import ru.otus.library.dto.CommentDto;
-import ru.otus.library.security.ApplicationUserService;
 import ru.otus.library.services.AuthorService;
 import ru.otus.library.services.BookService;
 import ru.otus.library.services.CommentService;
 import ru.otus.library.services.GenreService;
 
-import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest({LibraryController.class, CommentController.class, BookController.class})
 @DisplayName("Unauthenticated user should: ")

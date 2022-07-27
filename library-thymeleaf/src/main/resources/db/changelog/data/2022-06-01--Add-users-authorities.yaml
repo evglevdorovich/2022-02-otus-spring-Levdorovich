@@ -5,11 +5,10 @@ databaseChangeLog:
       context: v1.0
       runOnChange: true
       loadUpdateData:
-        primaryKey: user_id, authority_id
+        primaryKey: user_id,authority_id
         file: data/2022-06-01--users-authorities.csv
         relativeToChangelogFile: true
         separator: ;
         quotChar: '"'
-        seperator: ';'
         encoding: UTF-8
         tableName: users_authorities

@@ -8,6 +8,7 @@ databaseChangeLog:
           - column:
               name: id
               type: bigint
+              startWith: 6
               autoIncrement: true
               constraints:
                 nullable: false
